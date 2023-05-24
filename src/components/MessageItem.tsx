@@ -1,5 +1,6 @@
 import moment from "moment";
 import { useAuth } from "src/hooks/useAuth";
+import { useVenomWallet } from "src/hooks/useVenomWallet";
 import styled from "styled-components";
 
 const Wrapper = styled.div<{ outgoing?: boolean }>`
@@ -35,9 +36,10 @@ const TimeAndHash = styled.div`
 const Timestamp = styled.div``;
 const Hash = styled.div``;
 
-const me = "0:40011381ab8e52ee4148b115e27da41061bbf96464f854ecbec93fc82cd9514d";
-
 export const MessageItem = ({ sender, timestamp, hash, text }: any) => {
+  const wallet = useVenomWallet();
+  const me = wallet.address?.toString();
+
   return (
     <Wrapper outgoing={sender === me}>
       <Message>

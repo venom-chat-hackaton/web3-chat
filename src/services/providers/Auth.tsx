@@ -9,6 +9,8 @@ import {
 import { VenomConnect } from "venom-connect";
 import { initVenomConnect } from "./initVenomConnect";
 import { useTheme } from "src/hooks/useTheme";
+import { abi as AccountAbi } from "contracts/abi/Account.abi";
+import { abi as SocketAbi } from "contracts/abi/Socket.abi";
 
 interface Wallet {
   publicKey: string;
@@ -20,11 +22,13 @@ interface AuthContextProps {
   provider?: ProviderRpcClient;
   logIn: Function;
   logOut: Function;
+  createSocket: Function;
 }
 
 const defaultContext: AuthContextProps = {
   logIn: new Function(),
   logOut: new Function(),
+  createSocket: new Function(),
 };
 
 export const AuthContext = createContext<AuthContextProps>(defaultContext);
@@ -49,6 +53,10 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    openSocket();
+  }, [provider])
+
+  useEffect(() => {
     const registerHandlers = () => {
       const connect = connection?.on("connect", onConnect);
 
@@ -71,8 +79,43 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     setConnection(connection);
   };
 
+  const openSocket = async () => {
+    const socket = localStorage.getItem("SOCKET_ADDRESS") as string;
+    if (!provider || !socket || !wallet?.address) return;
+
+    const address = new Address(socket);
+    const contract = new provider.Contract(SocketAbi, address);
+    await contract.methods
+      .openSocket()
+      .send({ from: wallet?.address, amount: "100000000" });
+  };
+
+  const createSocket = async () => {
+    if (!provider || !wallet?.address) return;
+
+    const address = new Address(
+      "0:b4acf1de005d5dc1f4cdefb0e3bc5cb50eb6f26af30c886e28fc74a26417bf23"
+    );
+    const contract = new provider.Contract(AccountAbi, address);
+    const result = await contract.methods
+      .deploySocket({
+        sendRemainingGasTo: wallet?.address,
+      })
+      .sendWithResult({
+        amount: "1000000000",
+        from: wallet?.address,
+        bounce: true,
+      });
+
+    const socketAddress =
+      result?.childTransaction?.outMessages[0]?.dst?.toString();
+    localStorage.setItem("SOCKET_ADDRESS", String(socketAddress));
+    await openSocket();
+  };
+
   const onConnect = async () => {
     await getInfo();
+    await openSocket();
   };
 
   const checkAuth = async () => {
@@ -106,6 +149,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         provider,
         logIn,
         logOut,
+        createSocket,
       }}
     >
       {children}

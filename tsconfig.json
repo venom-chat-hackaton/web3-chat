@@ -16,10 +16,11 @@
     "noEmit": true,
     "jsx": "react-jsx",   
     "paths": {
-      "src/*": ["./src/*"]
+      "src/*": ["./src/*"],
+      "contracts/*": ["./contracts/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "contracts"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "files": [
     "codegen.ts",
