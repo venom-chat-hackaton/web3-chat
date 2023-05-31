@@ -1,11 +1,9 @@
 import { Spin, Steps } from "antd";
-import { create } from "domain";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Button } from "src/components/Button";
 import { useAuth } from "src/hooks/useAuth";
 import styled from "styled-components";
-import { In } from "typeorm";
 
 const StyledSteps = styled(Steps)``;
 
