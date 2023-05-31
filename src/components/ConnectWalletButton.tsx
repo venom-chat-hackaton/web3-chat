@@ -1,6 +1,7 @@
 import { useAuth } from "src/hooks/useAuth";
 import { Button } from "./Button";
 import styled from "styled-components";
+import WalletIcon from '/img/venom-wallet-icon.png';
 
 const VenomWalletIcon = styled.img`
   max-width: 35px;
@@ -21,7 +22,7 @@ export const ConnectWalletButton = () => {
       type="primary"
       text="Connect Venom Wallet"
       icon={VenomWalletIcon}
-      iconSrc="/src/assets/img/venom-wallet-icon.png"
+      iconSrc={WalletIcon}
     />
   );
 };

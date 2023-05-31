@@ -46,9 +46,9 @@ export const AsideHeader = () => {
     <Wrapper>
       <HeaderText>Messages</HeaderText>
       <Buttons>
-        <Icon src="/src/assets/img/add-contact.svg" />
-        <Icon src="/src/assets/img/settings.svg" />
-        <Icon onClick={onLogOut} src="/src/assets/img/logout.svg" />
+        <Icon src="/img/add-contact.svg" />
+        <Icon src="/img/settings.svg" />
+        <Icon onClick={onLogOut} src="/img/logout.svg" />
       </Buttons>
     </Wrapper>
   );
