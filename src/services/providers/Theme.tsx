@@ -64,7 +64,6 @@ export const ThemeProvider: FC<PropsWithChildren> = ({ children }) => {
       <SCThemeContext.Provider value={theme}>
         <ConfigProvider
           theme={{
-            hashed: false,
             token: theme,
           }}
         >

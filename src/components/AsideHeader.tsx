@@ -1,5 +1,8 @@
+import { Modal } from "antd";
 import { useAuth } from "src/hooks/useAuth";
 import styled from "styled-components";
+import { Settings } from "./Settings";
+import { useState } from "react";
 
 const HeaderText = styled.div`
   padding: 20px 0px 20px 25px;
@@ -37,9 +40,14 @@ const Buttons = styled.div`
 
 export const AsideHeader = () => {
   const { logOut } = useAuth();
+  const [isOpenSettings, setIsOpenSettings] = useState(false);
 
   const onLogOut = () => {
     logOut();
+  };
+
+  const toggleSettings = () => {
+    setIsOpenSettings(!isOpenSettings);
   };
 
   return (
@@ -47,9 +55,20 @@ export const AsideHeader = () => {
       <HeaderText>Messages</HeaderText>
       <Buttons>
         <Icon src="/img/add-contact.svg" />
-        <Icon src="/img/settings.svg" />
+        <Icon onClick={toggleSettings} src="/img/settings.svg" />
         <Icon onClick={onLogOut} src="/img/logout.svg" />
       </Buttons>
+      <Modal
+        centered={true}
+        title="Settings"
+        open={isOpenSettings}
+        onCancel={toggleSettings}
+        maskClosable={true}
+        footer={null}
+        width={300}
+      >
+        <Settings />
+      </Modal>
     </Wrapper>
   );
 };

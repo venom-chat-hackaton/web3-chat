@@ -14,23 +14,9 @@ const Wrapper = styled.div`
 `;
 
 const App = () => {
-  const [debug, setDebug] = useState(false);
-
   return (
     <Wrapper>
       <Layout />
-      <div style={{ position: "absolute", top: "10px", left: "10px" }}>
-        {debug ? (
-          <>
-            <div onClick={() => setDebug(false)}>X</div>
-            <ThemeSwitcher />
-            <LanguageChanger />
-            <VenomWalletConnect />
-          </>
-        ) : (
-          <div onClick={() => setDebug(true)}>debug</div>
-        )}
-      </div>
     </Wrapper>
   );
 };
