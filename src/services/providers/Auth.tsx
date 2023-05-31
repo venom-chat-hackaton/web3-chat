@@ -11,6 +11,7 @@ import { initVenomConnect } from "./initVenomConnect";
 import { useTheme } from "src/hooks/useTheme";
 import { abi as AccountAbi } from "contracts/abi/Account.abi";
 import { abi as SocketAbi } from "contracts/abi/Socket.abi";
+import { useLocalStorage } from "src/hooks/useLocalStorage";
 
 interface Wallet {
   publicKey: string;
@@ -23,24 +24,35 @@ interface AuthContextProps {
   logIn: Function;
   logOut: Function;
   createSocket: Function;
+  checkSocket: Function;
+  checkAuth: Function;
+  hasInitialized: boolean;
+  socketAddress?: string;
 }
 
 const defaultContext: AuthContextProps = {
   logIn: new Function(),
   logOut: new Function(),
   createSocket: new Function(),
+  checkSocket: new Function(),
+  checkAuth: new Function(),
+  hasInitialized: false,
+  socketAddress: "",
 };
 
 export const AuthContext = createContext<AuthContextProps>(defaultContext);
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const { id: theme } = useTheme();
+  const [hasInitialized, setHasInitialized] = useState(false);
   const [connection, setConnection] = useState<VenomConnect>();
   const [provider, setProvider] = useState<ProviderRpcClient>();
   const [wallet, setWallet] = useState<Wallet>();
+  const [socketAddress, setSocketAddress, deleteSocketAddress] =
+    useLocalStorage("SOCKET_ADDRESS", "");
 
   useEffect(() => {
-    connection?.updateTheme(theme);
+    connection?.updateTheme(theme || 'dark');
   }, [theme]);
 
   useEffect(
@@ -51,10 +63,6 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     initConnection();
   }, []);
-
-  useEffect(() => {
-    openSocket();
-  }, [provider])
 
   useEffect(() => {
     const registerHandlers = () => {
@@ -102,20 +110,22 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         sendRemainingGasTo: wallet?.address,
       })
       .sendWithResult({
-        amount: "1000000000",
+        amount: "50000000",
         from: wallet?.address,
         bounce: true,
       });
 
     const socketAddress =
       result?.childTransaction?.outMessages[0]?.dst?.toString();
-    localStorage.setItem("SOCKET_ADDRESS", String(socketAddress));
+    setSocketAddress(String(socketAddress));
     await openSocket();
   };
 
+  const checkSocket = () => new Promise((resolve) => setTimeout(resolve, 500));
+
   const onConnect = async () => {
     await getInfo();
-    await openSocket();
+    setHasInitialized(true);
   };
 
   const checkAuth = async () => {
@@ -131,6 +141,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const logOut = () => {
     connection?.currentProvider?.disconnect();
+    deleteSocketAddress();
     setWallet(undefined);
   };
 
@@ -138,6 +149,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     const state = await connection?.currentProvider?.getProviderState();
     const address = state?.permissions?.accountInteraction?.address;
     const publicKey = state?.permissions.accountInteraction?.publicKey;
+
+    if (!address && !publicKey) return;
 
     setWallet({ address, publicKey });
   };
@@ -150,6 +163,10 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         logIn,
         logOut,
         createSocket,
+        checkSocket,
+        checkAuth,
+        hasInitialized,
+        socketAddress,
       }}
     >
       {children}

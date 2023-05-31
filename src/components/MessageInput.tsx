@@ -2,20 +2,22 @@ import { Input } from "antd";
 import { useInput } from "src/hooks/useInput";
 import { useMessages } from "src/hooks/useMessages";
 import styled from "styled-components";
+import { Button } from "./Button";
 
 const Wrapper = styled.div`
   padding: 46px 32px 24px 32px;
   position: relative;
 `;
 
-const StyledInput = styled(Input)`
+const StyledInput = styled(Input.TextArea)`
   height: 100%;
   line-height: 10px;
+  resize: none !important;
+  padding: 12px 15px;
 `;
 
-const SendButton = styled.div`
+const SendButtonWrapper = styled.div`
   position: absolute;
-  cursor: pointer;
   right: 50px;
   bottom: 40px;
 `;
@@ -30,8 +32,10 @@ export const MessageInput = () => {
 
   return (
     <Wrapper>
-      <StyledInput {...input} />
-      <SendButton onClick={onClick}>Send</SendButton>
+      <StyledInput rows={3} placeholder="Message" {...input} />
+      <SendButtonWrapper>
+        <Button onClick={onClick} text="Send" type="primary" />
+      </SendButtonWrapper>
     </Wrapper>
   );
 };

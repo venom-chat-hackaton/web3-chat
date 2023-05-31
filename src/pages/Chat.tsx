@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   justify-content: center;
 `;
 
-export const ChatAppPage = () => {
+export const ChatPage = () => {
   return (
     <Wrapper>
       <Layout />

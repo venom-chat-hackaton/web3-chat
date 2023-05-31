@@ -6,7 +6,7 @@ const Wrapper = styled.div`
   font-size: 18px;
   line-height: 28px;
   font-weight: 500;
-  border-bottom: 1px solid ${(props) => `${props.theme.colorTextBase}`};
+  border-bottom: 2px solid ${(props) => `${props.theme.colorBorder}`};
 `;
 
 const Alias = styled.div`

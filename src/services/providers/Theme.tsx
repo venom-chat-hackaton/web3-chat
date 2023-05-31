@@ -18,7 +18,7 @@ export enum Theme {
 }
 
 interface ThemeContextProps {
-  id: Theme;
+  id?: Theme;
   theme: Partial<AliasToken>;
   switchTheme: () => void;
 }
@@ -64,6 +64,7 @@ export const ThemeProvider: FC<PropsWithChildren> = ({ children }) => {
       <SCThemeContext.Provider value={theme}>
         <ConfigProvider
           theme={{
+            hashed: false,
             token: theme,
           }}
         >

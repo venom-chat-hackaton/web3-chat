@@ -1,5 +1,9 @@
 import { abi as SocketAbi } from "contracts/abi/Socket.abi";
-import { Address, Subscriber } from "everscale-inpage-provider";
+import {
+  Address,
+  DecodedEventWithTransaction,
+  Subscriber,
+} from "everscale-inpage-provider";
 import moment from "moment";
 import {
   FC,
@@ -44,20 +48,20 @@ export const MessagesProvider: FC<PropsWithChildren> = ({ children }) => {
     contract
       .events(subscriber)
       .filter((event) => event.event === "NewMessage")
-      .on(async (event) => {
-        console.log(event);
-        const eventData = {
-          message: event.data.msg.toString(),
-        };
-        console.log("newMessage", eventData);
-        addMessage(eventData.message);
-      });
+      .on(addMessage);
   };
 
-  const addMessage = (message: string) => {
+  const addMessage = async (
+    event: DecodedEventWithTransaction<typeof SocketAbi, "NewMessage">
+  ) => {
+    const message = event?.data.msg.toString();
     setMessages((value) => [
       ...value,
-      { text: message, timestamp: moment.now(), sender: wallet.address?.toString() },
+      {
+        text: message,
+        timestamp: moment.now(),
+        sender: wallet.address?.toString(),
+      },
     ]);
   };
 
@@ -67,9 +71,10 @@ export const MessagesProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const address = new Address(socket);
     const contract = new provider.Contract(SocketAbi, address);
+
     await contract.methods.sendMessage({ message: text }).send({
       from: wallet?.address,
-      amount: "10000000000",
+      amount: "500000000",
       bounce: true,
     });
   };

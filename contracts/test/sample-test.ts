@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { expect } from "chai";
 import { Contract, Signer } from "locklift";
 import { FactorySource } from "../build/factorySource";

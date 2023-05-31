@@ -1,5 +1,4 @@
 import { useAuth } from "src/hooks/useAuth";
-import { useVenomWallet } from "src/hooks/useVenomWallet";
 import styled from "styled-components";
 
 const HeaderText = styled.div`
@@ -9,51 +8,48 @@ const HeaderText = styled.div`
   font-weight: 500px;
 `;
 
-const CreateSocketButton = styled.div`
-  font-size: 8px;
-  border: 1px solid ${({ theme }) => theme.colorTextBase};
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  line-height: 12px;
-  margin-left: 6px;
-  text-transform: uppercase;
+const Icon = styled.img`
+  transition: filter 0.1s ease;
   cursor: pointer;
+  width: 18px;
+  height: 18px;
+  filter: ${(props) => props.theme.colorTextBaseFilter};
 
   &:hover {
-    background-color: ${(props) => `${props.theme.colorBgContainer}`};
+    filter: invert(57%) sepia(95%) saturate(399%) hue-rotate(112deg)
+      brightness(95%) contrast(87%);
   }
 `;
 
-const TickIcon = styled.div`
-  color: green;
-  display: inline;
-  margin-left: 10px;
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  width: 100px;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 25px;
 `;
 
 export const AsideHeader = () => {
-  const { createSocket } = useAuth();
-  const wallet = useVenomWallet();
-  const address = wallet.address?.toString();
-  const socket = localStorage.getItem("SOCKET_ADDRESS");
+  const { logOut } = useAuth();
 
-  const onClick = () => {
-    createSocket();
-  }
+  const onLogOut = () => {
+    logOut();
+  };
 
   return (
-    <HeaderText>
-      <>
-        {address && address?.slice(0, 5)}...{address?.slice(-5)}
-      </>
-      {socket ? (
-        <TickIcon>✓</TickIcon>
-      ) : (
-        <CreateSocketButton onClick={onClick}>Create socket</CreateSocketButton>
-      )}
-      <br />
-      {Number(wallet.balance) / 1000000000} VENOM
-    </HeaderText>
+    <Wrapper>
+      <HeaderText>Messages</HeaderText>
+      <Buttons>
+        <Icon src="/src/assets/img/add-contact.svg" />
+        <Icon src="/src/assets/img/settings.svg" />
+        <Icon onClick={onLogOut} src="/src/assets/img/logout.svg" />
+      </Buttons>
+    </Wrapper>
   );
 };

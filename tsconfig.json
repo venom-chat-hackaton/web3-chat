@@ -20,10 +20,10 @@
       "contracts/*": ["./contracts/*"]
     }
   },
+  "exclude": ["contracts"],
   "include": ["src", "contracts"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "files": [
-    "codegen.ts",
     "vite.config.ts"
   ],
 }

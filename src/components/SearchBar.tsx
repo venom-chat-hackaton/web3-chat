@@ -8,13 +8,13 @@ const StyledInput = styled(Input)`
 
 const Wrapper = styled.div`
   padding: 0px 16px 12px 16px;
-  border-bottom: 1px solid ${(props) => `${props.theme.colorTextBase}`};
+  border-bottom: 2px solid ${(props) => `${props.theme.colorBorder}`};
 `;
 
 export const SearchBar = () => {
   return (
     <Wrapper>
-      <StyledInput />
+      <StyledInput placeholder="Search for message" />
     </Wrapper>
   );
 };

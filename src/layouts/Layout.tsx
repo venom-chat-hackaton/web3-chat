@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { Aside } from "./Aside";
+import { useAuth } from "src/hooks/useAuth";
+import { Initialization } from "src/pages/Initialization";
+import { Auth } from "src/pages/Auth";
 import { Content } from "./Content";
 
 const Wrapper = styled.div`
@@ -11,11 +14,30 @@ const Wrapper = styled.div`
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   height: 90vh;
-  border: 1px solid ${(props) => `${props.theme.colorTextBase}`};
-  box-shadow:  0px 0px 60px rgba(255,255,255,0.2);
+  border: 2px solid ${(props) => `${props.theme.colorBorder}`};
+  background-color: ${(props) => `${props.theme.colorBgContainer}`};
 `;
 
 export const Layout = () => {
+  const { wallet } = useAuth();
+
+  if (!wallet) {
+    return (
+      <Wrapper>
+        <Auth />
+      </Wrapper>
+    );
+  }
+
+  const socket = localStorage.getItem("SOCKET_ADDRESS");
+  if (!socket) {
+    return (
+      <Wrapper>
+        <Initialization />
+      </Wrapper>
+    );
+  }
+
   return (
     <Wrapper>
       <Aside />
