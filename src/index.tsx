@@ -8,6 +8,7 @@ import { ThemeProvider } from "./services/providers/Theme";
 import { AuthProvider } from "./services/providers/Auth";
 import { ChatsProvider } from "./services/providers/Chats";
 import { MessagesProvider } from "./services/providers/Messages";
+import { StateProvider } from "./services/providers/State";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -18,7 +19,9 @@ root.render(
       <AuthProvider>
         <ChatsProvider>
           <MessagesProvider>
-            <App />
+            <StateProvider>
+              <App />
+            </StateProvider>
           </MessagesProvider>
         </ChatsProvider>
       </AuthProvider>

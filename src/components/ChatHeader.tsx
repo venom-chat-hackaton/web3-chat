@@ -1,5 +1,8 @@
 import { useVenomWallet } from "src/hooks/useVenomWallet";
 import styled from "styled-components";
+import { ExternalLink } from "./ExternalLink";
+import { Copy } from "./Copy";
+import { useCurrentState } from "src/hooks/useCurrentState";
 
 const Wrapper = styled.div`
   padding: 20px 25px;
@@ -14,18 +17,29 @@ const Alias = styled.div`
   font-size: 18px;
 `;
 const Hash = styled.div`
+  font-family: monospaced;
   font-size: 14px;
+  display: flex;
+  width: 150px;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const ChatHeader = () => {
-  const wallet = useVenomWallet();
-  const address = wallet.address?.toString();
+  const { recipient } = useCurrentState();
+  const address = recipient.address?.toString();
+
+  if (!recipient.address) return null;
 
   return (
     <Wrapper>
       <Alias>Me</Alias>
       <Hash>
-        {address?.slice(0, 5)}...{address?.slice(-5)}
+        <code>
+          {address?.slice(0, 5)}...{address?.slice(-5)}
+        </code>
+        <ExternalLink hash="address" />
+        <Copy text={address?.toString()} />
       </Hash>
     </Wrapper>
   );

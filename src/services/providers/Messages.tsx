@@ -12,6 +12,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useAuth } from "src/hooks/useAuth";
 import { useVenomProvider } from "src/hooks/useVenomProvider";
 import { useVenomWallet } from "src/hooks/useVenomWallet";
 
@@ -41,7 +42,7 @@ export const MessagesProvider: FC<PropsWithChildren> = ({ children }) => {
     const socket = localStorage.getItem("SOCKET_ADDRESS");
     if (!provider || !socket) return;
 
-    const address = new Address(socket);
+    const address = new Address(JSON.parse(socket));
     const contract = new provider.Contract(SocketAbi, address);
     const subscriber = new Subscriber(provider);
 
@@ -55,28 +56,32 @@ export const MessagesProvider: FC<PropsWithChildren> = ({ children }) => {
     event: DecodedEventWithTransaction<typeof SocketAbi, "NewMessage">
   ) => {
     const message = event?.data.msg.toString();
+    // @ts-ignore
+    const sender = event?.data.sender.toString();
     setMessages((value) => [
       ...value,
       {
         text: message,
         timestamp: moment.now(),
-        sender: wallet.address?.toString(),
+        sender,
       },
     ]);
   };
 
-  const sendMessage = async (text: string) => {
-    const socket = localStorage.getItem("SOCKET_ADDRESS");
-    if (!provider || !socket || !wallet.address) return;
+  const sendMessage = async (text: string, sender: Address) => {
+    // @ts-ignore
+    addMessage({ data: { msg: text, sender } });
+    // const socket = localStorage.getItem("SOCKET_ADDRESS");
+    // if (!provider || !socket || !wallet.address) return;
 
-    const address = new Address(socket);
-    const contract = new provider.Contract(SocketAbi, address);
+    // const address = new Address(JSON.parse(socket));
+    // const contract = new provider.Contract(SocketAbi, address);
 
-    await contract.methods.sendMessage({ message: text }).send({
-      from: wallet?.address,
-      amount: "500000000",
-      bounce: true,
-    });
+    // await contract.methods.sendMessage({ message: text }).send({
+    //   from: wallet?.address,
+    //   amount: "100000000",
+    //   bounce: true,
+    // });
   };
 
   return (

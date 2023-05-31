@@ -7,8 +7,13 @@ export const useInput = (initialValue = '') => {
     setValue(event.target.value)
   }
 
+  const clear = () => {
+    setValue('');
+  }
+
   return {
     value,
     onChange,
+    clear,
   }
 }

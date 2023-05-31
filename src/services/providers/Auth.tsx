@@ -89,9 +89,12 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const openSocket = async () => {
     const socket = localStorage.getItem("SOCKET_ADDRESS") as string;
+    console.log(provider, socket, wallet);
     if (!provider || !socket || !wallet?.address) return;
 
-    const address = new Address(socket);
+    console.log('opensocket');
+
+    const address = new Address(JSON.parse(socket));
     const contract = new provider.Contract(SocketAbi, address);
     await contract.methods
       .openSocket()

@@ -9,6 +9,8 @@ export const light: Partial<AliasToken | any> = {
   colorBorder: "rgba(0,0,0,.07)",
   colorPrimary: "#11a97d",
   colorPrimaryHover: "#15cc97",
+  colorMessageBg: "rgba(0,0,0,.07)",
+  colorMessageText: "#171717",
   colorTextBaseFilter:
     "invert(4%) sepia(11%) saturate(0%) hue-rotate(352deg) brightness(104%) contrast(90%)",
 };
