@@ -1,7 +1,3 @@
-import { LanguageChanger } from "./components/LanguageChanger";
-import { ThemeSwitcher } from "./components/ThemeSwitcher";
-import { VenomWalletConnect } from "./components/VenomWalletConnect";
-import { useState } from "react";
 import { Layout } from "./layouts/Layout";
 import styled from "styled-components";
 

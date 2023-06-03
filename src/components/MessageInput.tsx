@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Button } from "./Button";
 import { useVenomWallet } from "src/hooks/useVenomWallet";
 import { Address } from "everscale-inpage-provider";
+import { useCurrentState } from "src/hooks/useCurrentState";
 
 const Wrapper = styled.div`
   padding: 46px 32px 24px 32px;
@@ -27,22 +28,12 @@ const SendButtonWrapper = styled.div`
 
 export const MessageInput = () => {
   const { sendMessage } = useMessages();
-  const wallet = useVenomWallet();
   const input = useInput("");
+  const { recipient } = useCurrentState();
 
   const onClick = () => {
     if (!input.value.trim()) return;
-    sendMessage(input.value, wallet.address);
-    input.clear();
-  };
-  const onDblClick = () => {
-    if (!input.value.trim()) return;
-    sendMessage(
-      input.value,
-      new Address(
-        "0:a590a43905379121f0a870434999dc9a1ae9d1a4640810e31f26902b655b1e1a"
-      )
-    );
+    sendMessage(input.value, recipient.address?.toString());
     input.clear();
   };
 
@@ -51,7 +42,6 @@ export const MessageInput = () => {
       <StyledInput rows={3} placeholder="Message" {...input} />
       <SendButtonWrapper>
         <Button onClick={onClick} text="Send" type="primary" />
-        {/* <Button onDoubleClick={onDblClick} text="Send" type="primary" /> */}
       </SendButtonWrapper>
     </Wrapper>
   );

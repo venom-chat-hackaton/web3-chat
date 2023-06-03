@@ -3,12 +3,56 @@ import { useAuth } from "src/hooks/useAuth";
 import styled from "styled-components";
 import { Settings } from "./Settings";
 import { useState } from "react";
+import { useSockets } from "src/hooks/useSockets";
+import { CreateChat } from "./CreateChat";
+import { useVenomWallet } from "src/hooks/useVenomWallet";
+import { ExternalLink } from "./ExternalLink";
+import { Copy } from "./Copy";
+import { useCurrentState } from "src/hooks/useCurrentState";
 
 const HeaderText = styled.div`
   padding: 20px 0px 20px 25px;
-  font-size: 18px;
+  font-size: 14px;
   line-height: 28px;
   font-weight: 500px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const OnlineIcon = styled.div`
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 7px;
+  height: 7px;
+  border-radius: 100%;
+  background-color: ${(props) => props.theme.colorPrimary};
+  display: inline-block;
+  font-family: ;
+`;
+
+const Address = styled.code`
+  display: flex;
+  align-items: center;
+  width: 170px;
+  justify-content: space-between;
+  cursor: pointer;
+
+  & > .external-link {
+    transition: opacity 0.1s ease;
+    opacity: 0;
+  }
+
+  &:hover > .external-link {
+    opacity: 1;
+  }
+
+  & > .copy {
+    transition: opacity 0.1s ease;
+    opacity: 0;
+  }
+
+  &:hover > .copy {
+    opacity: 1;
+  }
 `;
 
 const Icon = styled.img`
@@ -39,25 +83,55 @@ const Buttons = styled.div`
 `;
 
 export const AsideHeader = () => {
+  const wallet = useVenomWallet();
+  const address = wallet.address?.toString();
   const { logOut } = useAuth();
+  const { resetState } = useCurrentState();
+  const { deleteUserSocket } = useSockets();
   const [isOpenSettings, setIsOpenSettings] = useState(false);
+  const [isOpenCreateChat, setIsOpenCreateChat] = useState(false);
 
   const onLogOut = () => {
     logOut();
+    deleteUserSocket();
+    resetState();
   };
 
   const toggleSettings = () => {
     setIsOpenSettings(!isOpenSettings);
   };
 
+  const toggleCreateChat = () => {
+    setIsOpenCreateChat(!isOpenCreateChat);
+  };
+
   return (
     <Wrapper>
-      <HeaderText>Messages</HeaderText>
+      <HeaderText>
+        {/* Messages */}
+        <Address>
+          <OnlineIcon />
+          {address?.slice(0, 5)}...{address?.slice(-5)}
+          <ExternalLink hash="address" />
+          <Copy text={address?.toString()} />
+        </Address>
+      </HeaderText>
       <Buttons>
-        <Icon src="/img/add-contact.svg" />
+        <Icon onClick={toggleCreateChat} src="/img/add-contact.svg" />
         <Icon onClick={toggleSettings} src="/img/settings.svg" />
         <Icon onClick={onLogOut} src="/img/logout.svg" />
       </Buttons>
+      <Modal
+        centered={true}
+        title="Create chat"
+        open={isOpenCreateChat}
+        onCancel={toggleCreateChat}
+        maskClosable={true}
+        footer={null}
+        width={300}
+      >
+        <CreateChat />
+      </Modal>
       <Modal
         centered={true}
         title="Settings"

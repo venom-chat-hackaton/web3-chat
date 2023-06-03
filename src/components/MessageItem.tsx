@@ -3,6 +3,7 @@ import moment from "moment";
 import { useVenomWallet } from "src/hooks/useVenomWallet";
 import styled from "styled-components";
 import { ExternalLink } from "./ExternalLink";
+import { Spin } from "antd";
 
 const Wrapper = styled(motion.div)<{ outgoing?: boolean }>`
   width: 100%;
@@ -30,8 +31,7 @@ const Text = styled.div<{ outgoing?: boolean }>`
     props.outgoing ? props.theme.colorPrimary : props.theme.colorMessageBg};
   padding: 10px 14px;
   border-radius: 8px;
-  ${(props) =>
-    `border-top-${props.outgoing ? 'right' : 'left'}-radius: 2px;`}
+  ${(props) => `border-top-${props.outgoing ? "right" : "left"}-radius: 2px;`}
   color: ${(props) =>
     props.outgoing
       ? props.theme.colorTextLightSolid
@@ -49,7 +49,14 @@ const TimeAndHash = styled.div<{ outgoing?: boolean }>`
 `;
 const Hash = styled.div``;
 
-export const MessageItem = ({ sender, timestamp, hash, text }: any) => {
+export const MessageItem = ({
+  sender,
+  recipient,
+  timestamp,
+  text,
+  isPending,
+  messageHash,
+}: any) => {
   const wallet = useVenomWallet();
   const me = wallet.address?.toString();
   const outgoing = sender === me;
@@ -64,8 +71,9 @@ export const MessageItem = ({ sender, timestamp, hash, text }: any) => {
     >
       <Message outgoing={outgoing}>
         <TimeAndHash outgoing={outgoing}>
+          {isPending && <Spin size="small" />}
           <ExternalLink hash="0:8086ebe35106ad2333874962d960630f3c5807c8b849d43f0ef663a239fddd2f" />
-          <code>{moment(timestamp).format("HH:mm")}</code>
+          <code>{moment.unix(timestamp).format("HH:mm")}</code>
         </TimeAndHash>
         <Text outgoing={outgoing}>{text}</Text>
       </Message>

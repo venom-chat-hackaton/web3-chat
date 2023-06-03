@@ -4,33 +4,20 @@ import { useMessages } from "src/hooks/useMessages";
 import { useVenomWallet } from "src/hooks/useVenomWallet";
 import { useCurrentState } from "src/hooks/useCurrentState";
 import { Address } from "everscale-inpage-provider";
+import { useChats } from "src/hooks/useChats";
 
 const Wrapper = styled.div``;
 
 export const ChatList = () => {
   const { openChat } = useCurrentState();
+  const { chats } = useChats();
   const wallet = useVenomWallet();
   const { messages } = useMessages();
   const lastMessage = messages[messages.length - 1];
 
   return (
     <Wrapper>
-      {[
-        {
-          address: wallet.address,
-          alias: "Me",
-          lastMessageTimestamp: lastMessage?.timestamp,
-          lastMessageText: lastMessage?.message,
-        },
-        {
-          address: new Address(
-            "0:186025fd713e6b20b21346b7379c26d34004aba5229b259e35cfcddf0c57a4d4"
-          ),
-          alias: "Me",
-          lastMessageTimestamp: lastMessage?.timestamp,
-          lastMessageText: lastMessage?.message,
-        },
-      ].map((chat) => {
+      {chats.map((chat) => {
         const onClick = () => {
           if (chat.address) {
             openChat(chat.address);

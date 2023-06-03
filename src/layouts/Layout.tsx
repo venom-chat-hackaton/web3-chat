@@ -4,6 +4,7 @@ import { useAuth } from "src/hooks/useAuth";
 import { Initialization } from "src/pages/Initialization";
 import { Auth } from "src/pages/Auth";
 import { Content } from "./Content";
+import { useUserSocket } from "src/hooks/useUserSocket";
 
 const Wrapper = styled.div`
   margin: auto;
@@ -20,6 +21,7 @@ const Wrapper = styled.div`
 
 export const Layout = () => {
   const { wallet } = useAuth();
+  const userSocket = useUserSocket();
 
   if (!wallet) {
     return (
@@ -29,8 +31,7 @@ export const Layout = () => {
     );
   }
 
-  const socket = localStorage.getItem("SOCKET_ADDRESS");
-  if (!socket) {
+  if (!userSocket) {
     return (
       <Wrapper>
         <Initialization />

@@ -2,7 +2,9 @@ import { Spin, Steps } from "antd";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Button } from "src/components/Button";
-import { useAuth } from "src/hooks/useAuth";
+import { useSockets } from "src/hooks/useSockets";
+import { useVenomProvider } from "src/hooks/useVenomProvider";
+import { useVenomWallet } from "src/hooks/useVenomWallet";
 import styled from "styled-components";
 
 const StyledSteps = styled(Steps)``;
@@ -51,26 +53,18 @@ const IncompletedStep = styled(Step)`
 `;
 
 export const Initialization = () => {
+  const { createSocket, getSocket } = useSockets();
   const [checkingSocket, setIsCheckingSocket] = useState(false);
   const [creatingSocket, setIsCreatingSocket] = useState(false);
-
+  const [hasSocket, setHasSocket] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const { createSocket, checkSocket } = useAuth();
 
-  const onClick = async () => {
+  const onCreateSocket = async () => {
+    if (hasSocket) return;
     setIsCreatingSocket(true);
     await createSocket();
     setIsCreatingSocket(false);
   };
-
-  useEffect(() => {
-    const initalizeChecking = async () => {
-      setIsCheckingSocket(true);
-      const check = await checkSocket();
-      setIsCheckingSocket(false);
-    };
-    initalizeChecking();
-  }, []);
 
   return (
     <Wrapper
@@ -122,7 +116,7 @@ export const Initialization = () => {
             ]}
           />
         </StepsWrapper>
-        <Button onClick={onClick} text="Initialize" type="primary" />
+        <Button onClick={onCreateSocket} text="Initialize" type="primary" />
       </Progress>
     </Wrapper>
   );

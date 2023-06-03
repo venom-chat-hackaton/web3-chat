@@ -9,18 +9,12 @@ export const abi = {
       outputs: [],
     },
     {
-      name: "openSocket",
-      inputs: [],
-      outputs: [],
-    },
-    {
-      name: "closeSocket",
-      inputs: [],
-      outputs: [],
-    },
-    {
       name: "sendMessage",
-      inputs: [{ name: "message", type: "string" }],
+      inputs: [
+        { name: "from", type: "string" },
+        { name: "dest", type: "string" },
+        { name: "message", type: "string" },
+      ],
       outputs: [],
     },
   ],
@@ -31,7 +25,11 @@ export const abi = {
   events: [
     {
       name: "NewMessage",
-      inputs: [{ name: "msg", type: "string" }],
+      inputs: [
+        { name: "fromAddress", type: "string" },
+        { name: "toAddress", type: "string" },
+        { name: "msg", type: "string" },
+      ],
       outputs: [],
     },
   ],
@@ -41,6 +39,5 @@ export const abi = {
     { name: "_constructorFlag", type: "bool" },
     { name: "_rootAccount", type: "address" },
     { name: "_owner", type: "address" },
-    { name: "_socketOpened", type: "bool" },
   ],
 } as const;

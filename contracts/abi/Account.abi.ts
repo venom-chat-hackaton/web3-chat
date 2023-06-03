@@ -13,6 +13,11 @@ export const abi = {
       inputs: [{ name: "sendRemainingGasTo", type: "address" }],
       outputs: [],
     },
+    {
+      name: "getSocketAddress",
+      inputs: [{ name: "owner", type: "address" }],
+      outputs: [{ name: "value0", type: "address" }],
+    },
   ],
   data: [
     { key: 1, name: "_nonce", type: "uint16" },
@@ -25,5 +30,6 @@ export const abi = {
     { name: "_constructorFlag", type: "bool" },
     { name: "_nonce", type: "uint16" },
     { name: "_socketCode", type: "cell" },
+    { name: "socketAddress", type: "map(address,address)" },
   ],
 } as const;
