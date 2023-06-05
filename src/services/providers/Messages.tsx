@@ -39,9 +39,11 @@ export const MessagesProvider: FC<PropsWithChildren> = ({ children }) => {
   const { chats, createChat } = useChats();
   const userSocket = useUserSocket();
   const [messages, setMessages] = useState<any[]>([]);
+  const [initalLoaded, setInitialLoaded] = useState(false);
 
   const getMessages = () => {
-    if (!provider || messages.length) return;
+    if (!provider || initalLoaded || !userSocket) return;
+    setInitialLoaded(true);
     // @ts-ignore
     const sockets: string[] = [
       // @ts-ignore
@@ -105,6 +107,7 @@ export const MessagesProvider: FC<PropsWithChildren> = ({ children }) => {
   const onNewMessage = (
     event: DecodedEventWithTransaction<typeof SocketAbi, "NewMessage">
   ) => {
+    console.log('newMessageTest', event);
     const messageHash = event.transaction.inMessage.hash;
     const message = event?.data.msg;
     const sender = event?.data.fromAddress;
@@ -127,11 +130,16 @@ export const MessagesProvider: FC<PropsWithChildren> = ({ children }) => {
     isPending,
     timestamp,
   }: any) => {
-    const existingMessage = messages.find(
-      ({ messageHash: mHash }: any) => mHash === messageHash
-    );
+    let existingMessage;
+    setMessages((msgs) => {
+      existingMessage = msgs.find(
+        ({ messageHash: mHash }: any) => mHash === messageHash
+      );
+      return msgs;
+    });
 
     if (existingMessage) {
+      // @ts-ignore
       existingMessage.isPending = false;
     } else {
       setMessages((value) => [
@@ -162,13 +170,17 @@ export const MessagesProvider: FC<PropsWithChildren> = ({ children }) => {
     const address = new Address(socket);
     const contract = new provider.Contract(SocketAbi, address);
 
-    const { messageHash } = await contract.methods
+    const r = await contract.methods
       .sendMessage({ message, from: wallet.address.toString(), dest })
       .sendDelayed({
         from: wallet?.address,
         amount: "50000000",
         bounce: true,
       });
+
+      console.log('newMessageTest', r);
+
+      const { messageHash } = r;
 
     addMessage({
       message,
