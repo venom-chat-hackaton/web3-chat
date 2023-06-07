@@ -1,10 +1,11 @@
-import { Address } from "locklift";
+const locklift = require('locklift');
+const Address = locklift.Address;
 
 async function main() {
-  const signer = (await locklift.keystore.getSigner("0"))!;
+  // const signer = await locklift.keystore.getSigner("0");
   const { contract: account, tx } = await locklift.factory.deployContract({
     contract: "Factory",
-    publicKey: signer.publicKey,
+    publicKey: 'b023514c19209fb2b5391bd29ca6fc4ae6a1791e0af5060801c80b95e9207da3',
     initParams: {
       _nonce: locklift.utils.getRandomNonce(),
       _userCode: (await locklift.factory.getContractArtifacts("User")).code,

@@ -6,7 +6,7 @@ import "./User.sol";
 import "./Chat.sol";
 
 contract Factory {
-    event NewChat(string peer1, string peer2);
+    event NewChat(address peer1, address peer2);
     uint16  static _nonce;
     TvmCell static _userCode;
     TvmCell static _chatCode;
@@ -70,7 +70,7 @@ contract Factory {
             sendRemainingGasTo
         ); 
         emit NewChat(peer1, peer2);
-        Chat(newChatAddress).sendMessage(peer1, peer2, initialMessage, messageUuid)
+        Chat(newChatAddress).sendMessage(peer1, peer2, initialMessage, messageUuid);
     }
 
     function getSocketAddress(address owner) external view returns (address) {

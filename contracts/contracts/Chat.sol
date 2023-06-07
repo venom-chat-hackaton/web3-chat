@@ -3,7 +3,7 @@ pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
 contract Chat {
-    event NewMessage(string fromAddress, string toAddress, string msg, string uuid);
+    event NewMessage(address fromAddress, address toAddress, string msg, string uuid);
     address static _rootAccount;
     address static _peer1;
     address static _peer2;
@@ -18,7 +18,7 @@ contract Chat {
         sendRemainingGasTo.transfer({ value: 0, flag: 128, bounce: false });
     }
 
-    function sendMessage(string from, string dest, string message, string uuid) external {
+    function sendMessage(address from, address dest, string message, string uuid) external pure {
         tvm.accept();
         //send external outbound message a.k.a events
         emit NewMessage(from, dest, message, uuid);

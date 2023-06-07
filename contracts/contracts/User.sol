@@ -1,3 +1,4 @@
+pragma ever-solidity >= 0.61.2;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
@@ -25,7 +26,7 @@ contract User {
         sendRemainingGasTo.transfer({ value: 0, flag: 128, bounce: false });
     }
 
-    function getSharedSecret(uint256 peerPubKey) external returns (uint256)
+    function getSharedSecret(uint256 peerPubKey) external view returns (uint256)
     {
        require(msg.sender == _owner, 201);
        tvm.rawReserve(0.1 ever, 0);
