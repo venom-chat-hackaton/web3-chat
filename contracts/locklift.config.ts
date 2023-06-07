@@ -102,8 +102,8 @@ const config: LockliftConfig = {
         },
       },
       giver: {
-        address: "0:e8335869f7fc7fdf918abae280acb83c0cbfe9bdd680e2581189e4d421d255fd",
-        phrase: "organ custom across convince float initial staff side text chest unusual stamp",
+        address: "0:93c7fb1a7ed7eb84de637b4b5b44bf98e6c13521619a150e2df2d6250af3cfc9",
+        phrase: "canyon combine task impulse library vehicle three destroy proud asthma nuclear olympic",
         accountId: 0,
       },
       tracing: {

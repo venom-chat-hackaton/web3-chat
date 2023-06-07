@@ -6,20 +6,18 @@ import "./User.sol";
 import "./Chat.sol";
 
 contract Factory {
+    event NewChat(string peer1, string peer2);
     uint16  static _nonce;
     TvmCell static _userCode;
     TvmCell static _chatCode;
-    mapping(address => address) userAddress; //Venom Wallet address -> User Address mapped
+    mapping(address => address) userAddress;
     mapping(address => mapping(address => address)) chatAddress;
-    //uint256 _managerPublicKey;
 
     constructor(
-        //uint256 managerPublicKey,
         address sendRemainingGasTo
     ) public {
         tvm.accept();
         tvm.rawReserve(0.1 ever, 0);
-        //_managerPublicKey = managerPublicKey;
         sendRemainingGasTo.transfer({ value: 0, flag: 128, bounce: false });
     }
 
@@ -29,12 +27,11 @@ contract Factory {
             contr: User,
             varInit: {
                 _rootAccount: address(this),
-                //_managerPublicKey: msg.pubkey(),
                 _owner: msg.sender
             },
             code: _userCode
         });
-        // address is a hash from state init
+        
         userAddress[msg.sender] = address(tvm.hash(userStateInit));
         new User{
             stateInit: userStateInit,
@@ -45,7 +42,7 @@ contract Factory {
         ); 
     }
 
-    function deployChat(address peer1, address peer2) external {
+    function deployChat(address peer1, address peer2, address sendRemainingGasTo, string initialMessage, string messageUuid) external {
 
         require(chatAddress[peer1][peer2] == address(0), 203);
         require(chatAddress[peer2][peer1] == address(0), 203);
@@ -61,14 +58,19 @@ contract Factory {
             code: _chatCode
         });
         // address is a hash from state init
-        chatAddress[peer1][peer2] = address(tvm.hash(chatStateInit));
+        address newChatAddress = address(tvm.hash(chatStateInit));
+        chatAddress[peer1][peer2] = newChatAddress;
         chatAddress[peer2][peer1] = chatAddress[peer1][peer2];
 
         new Chat{
             stateInit: chatStateInit,
             value: 0,
             flag: 128
-        }(); 
+        }(
+            sendRemainingGasTo
+        ); 
+        emit NewChat(peer1, peer2);
+        Chat(newChatAddress).sendMessage(peer1, peer2, initialMessage, messageUuid)
     }
 
     function getSocketAddress(address owner) external view returns (address) {
