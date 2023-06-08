@@ -140,13 +140,13 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
       const { text, timestamp } = messages?.[0] || {};
 
       addChat(
-        new Address(socket),
+        new Address(userAddress.toString()),
         user,
         contract,
         subscriber,
         text,
         timestamp,
-        messages
+        messages.reverse()
       );
     });
   };
@@ -176,7 +176,7 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
       });
 
     const newChat = {
-      wallet: new Address(socket),
+      wallet: new Address(address),
       user,
       lastMessageText: message,
       lastMessageTimestamp: moment().unix(),
@@ -361,13 +361,13 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
       });
 
       const newChat = {
-        wallet: new Address(socket),
+        wallet: new Address(event.data.peer1.toString()),
         user,
         contract,
         subscriber,
         lastMessageText: messages?.[0]?.text,
         lastMessageTimestamp: messages?.[0]?.timestamp,
-        messages,
+        messages: messages.reverse(),
       };
 
       setChats((list) => [...list, newChat]);

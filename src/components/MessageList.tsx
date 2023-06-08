@@ -23,19 +23,6 @@ export const MessageList = () => {
     () => clearInterval(interval);
   }, []);
 
-  const sortedList = [...messages].sort(
-    ({ timestamp: aTs }, { timestamp: bTs }) => {
-      if (aTs < bTs) {
-        return -1;
-      }
-      if (aTs > bTs) {
-        return 1;
-      }
-      // a must be equal to b
-      return 0;
-    }
-  );
-
   useEffect(
     // @ts-ignore
     () => bottomRef.current?.scrollIntoView({ behavior: "smooth" }),
@@ -44,7 +31,7 @@ export const MessageList = () => {
 
   return (
     <Wrapper>
-      {sortedList.map((message, index) => (
+      {messages.map((message: any, index: number) => (
         <MessageItem key={index} {...message} />
       ))}
       <div ref={bottomRef} />

@@ -42,7 +42,7 @@ const TimeAndHash = styled.div<{ outgoing?: boolean }>`
   font-size: 12px;
   display: flex;
   flex-direction: ${(props) => (props.outgoing ? "row" : "row-reverse")};
-  justify-content: flex-end;
+  justify-content: ${(props) => (props.outgoing ? "flex-end" : "flex-start")};
   width: 52px;
   align-items: center;
   margin: 0px 6px;
@@ -55,8 +55,9 @@ const StyledSpin = styled(Spin)`
   bottom: 0;
   left: -20px;
 `;
-const Timestamp = styled.code`
-margin-left: 6px;`;
+const Timestamp = styled.code<{ outgoing?: boolean }>`
+  ${(props) => (props.outgoing ? "margin-left: 6px;" : "margin-right: 6px;")};
+`;
 
 export const MessageItem = ({
   sender,
@@ -82,7 +83,9 @@ export const MessageItem = ({
       <Message outgoing={outgoing}>
         <TimeAndHash outgoing={outgoing}>
           <ExternalLink type="transactions" hash={hash} />
-          <Timestamp>{moment.unix(timestamp).format("HH:mm")}</Timestamp>
+          <Timestamp outgoing={outgoing}>
+            {moment.unix(timestamp).format("HH:mm")}
+          </Timestamp>
         </TimeAndHash>
         <Text outgoing={outgoing}>
           {text}
