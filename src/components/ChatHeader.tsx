@@ -35,7 +35,7 @@ export const ChatHeader = () => {
 
   return (
     <Wrapper>
-      <Alias>Me</Alias>
+      {/* <Alias>Me</Alias> */}
       <Hash>
         <code>
           {address?.slice(0, 5)}...{address?.slice(-5)}

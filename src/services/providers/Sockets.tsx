@@ -3,7 +3,7 @@ import {
   Contract,
   ProviderRpcClient,
 } from "everscale-inpage-provider";
-import { SimpleKeystore } from "everscale-standalone-client";
+import { box, randomBytes } from "tweetnacl";
 import {
   FC,
   PropsWithChildren,
@@ -19,11 +19,6 @@ import { useVenomWallet } from "src/hooks/useVenomWallet";
 import { abi as UserAbi } from "contracts/abi/User.abi";
 import { accountAddress } from "src/utils/constants";
 import { useCryption } from "src/hooks/useCryption";
-import * as ed from "@noble/ed25519";
-
-function Utf8ArrayToStr(array: Uint8Array) {
-  return new TextDecoder("utf-8").decode(array);
-}
 
 interface SocketsContextProps {
   getSocket: Function;
@@ -72,6 +67,7 @@ export const SocketsProvider: FC<PropsWithChildren> = ({ children }) => {
     setIsUserSocketInitiated(true);
 
     const contract = new provider.Contract(UserAbi, new Address(socket));
+    console.log(contract);
 
     setUserSocket(contract);
   };
@@ -85,9 +81,9 @@ export const SocketsProvider: FC<PropsWithChildren> = ({ children }) => {
   const createSocket = async () => {
     if (!provider || !wallet?.address || !wallet.publicKey) return;
 
-    const uint8PrivateKey = ed.utils.randomPrivateKey();
+    const { secretKey: uint8PrivateKey, publicKey: unit8PublicKey } =
+      box.keyPair();
     const privateKey = buf2hex(uint8PrivateKey.buffer);
-    const unit8PublicKey = await ed.getPublicKeyAsync(privateKey);
     const publicKey = buf2hex(unit8PublicKey.buffer);
 
     const encryptedData = await encrypt(privateKey);
@@ -105,6 +101,8 @@ export const SocketsProvider: FC<PropsWithChildren> = ({ children }) => {
         from: wallet?.address,
         bounce: true,
       });
+
+    updateUserSocket();
   };
 
   const getSocket = async (address: Address) => {

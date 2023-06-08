@@ -22,6 +22,8 @@
     "react-dom": "^18.2.0",
     "react-i18next": "^12.2.0",
     "styled-components": "^5.3.9",
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-util": "^0.15.1",
     "typescript": "^5.0.2",
     "uuid": "^9.0.0",
     "venom-connect": "^1.0.18",

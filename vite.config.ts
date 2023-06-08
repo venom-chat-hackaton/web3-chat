@@ -21,7 +21,7 @@ const wasmContentTypePlugin = {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    wasmContentTypePlugin,
+    // wasmContentTypePlugin,
     wasm(),
     topLevelAwait(),
     react(),

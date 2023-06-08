@@ -23,6 +23,8 @@ export const Layout = () => {
   const { wallet, logOut } = useAuth();
   const userSocket = useUserSocket();
 
+  // logOut();
+
   if (!wallet) {
     return (
       <Wrapper>

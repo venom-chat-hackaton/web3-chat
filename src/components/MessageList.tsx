@@ -3,6 +3,7 @@ import { MessageItem } from "./MessageItem";
 import { useMessages } from "src/hooks/useMessages";
 import { useEffect, useRef } from "react";
 import { useCurrentState } from "src/hooks/useCurrentState";
+import { useForceRender } from "src/hooks/useForceRender";
 
 const Wrapper = styled.div`
   padding: 0px 32px;
@@ -13,9 +14,15 @@ const Wrapper = styled.div`
 
 export const MessageList = () => {
   const { chat } = useCurrentState();
+  const forceUpdate = useForceRender();
   // @ts-ignore
   const messages = chat.messages;
   const bottomRef = useRef(null);
+
+  useEffect(() => {
+    const interval = setInterval(forceUpdate, 500);
+    () => clearInterval(interval);
+  }, []);
 
   const sortedList = [...messages].sort(
     ({ timestamp: aTs }, { timestamp: bTs }) => {

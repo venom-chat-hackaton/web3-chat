@@ -38,7 +38,7 @@ export const ChatList = () => {
         return (
           <ChatItem
             onClick={onClick}
-            key={chat.contract.address?.toString()}
+            key={chat.user.address?.toString()}
             {...chat}
           />
         );

@@ -19,15 +19,17 @@ IF
 LDMSGADDR
 ENDS
 .loc ../contracts/User.sol, 18
+ACCEPT
+.loc ../contracts/User.sol, 19
 PUSHINT 200000000
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/User.sol, 19
+.loc ../contracts/User.sol, 20
 GETGLOB 9
 GETGLOB 10
 SDEQ
 PUSHCONT {
-	.loc ../contracts/User.sol, 20
+	.loc ../contracts/User.sol, 21
 	GETGLOB 9
 	NEWC
 	STSLICECONST x42_
@@ -40,7 +42,7 @@ PUSHCONT {
 	.loc ../contracts/User.sol, 0
 }
 IFNOT
-.loc ../contracts/User.sol, 23
+.loc ../contracts/User.sol, 24
 NEWC
 STSLICECONST x42_
 STSLICE
@@ -64,7 +66,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/User.sol, 26
+.loc ../contracts/User.sol, 27
 ENDS
 .loc ../contracts/User.sol, 0
 CALLREF {
@@ -102,7 +104,7 @@ IFREF {
 THROW 0
 
 .macro getEncryptedPrivateKeyData_1429d957_internal_macro
-.loc ../contracts/User.sol, 28
+.loc ../contracts/User.sol, 29
 GETGLOB 12
 GETGLOB 13
 PAIR
@@ -117,7 +119,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/User.sol, 31
+.loc ../contracts/User.sol, 32
 ENDS
 .loc ../contracts/User.sol, 0
 CALLREF {
@@ -150,8 +152,14 @@ IFREF {
 }
 THROW 0
 
+.globl	getPublicKey_2e334452_internal
+.type	getPublicKey_2e334452_internal, @function
+CALL $getPublicKey_2e334452_internal_macro$
+
 .macro getPublicKey_2e334452_internal_macro
-.loc ../contracts/User.sol, 33
+.loc ../contracts/User.sol, 34
+ACCEPT
+.loc ../contracts/User.sol, 35
 GETGLOB 14
 .loc ../contracts/User.sol, 0
 

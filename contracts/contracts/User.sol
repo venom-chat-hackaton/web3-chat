@@ -15,6 +15,7 @@ contract User {
     string public static _publicKey;
 
     constructor(address sendRemainingGasTo) public {
+        tvm.accept();
         tvm.rawReserve(0.1 ever + 0.1 ever, 0);
         if (msg.sender != _rootAccount) {
             selfdestruct(msg.sender);
@@ -28,8 +29,9 @@ contract User {
         return PrivateKeyData(_encryptedPrivateKey, _privateKeyNonce);
     }
 
-    function getPublicKey() external view returns (string)
+    function getPublicKey() public view returns (string)
     {
+        tvm.accept();
         return _publicKey;
     }
 }

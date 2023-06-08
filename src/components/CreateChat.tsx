@@ -3,9 +3,10 @@ import { useInput } from "src/hooks/useInput";
 import styled from "styled-components";
 import { Button } from "./Button";
 import { useSockets } from "src/hooks/useSockets";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { useMessages } from "src/hooks/useMessages";
 import { useChats } from "src/hooks/useChats";
+import { useCurrentState } from "src/hooks/useCurrentState";
 
 const Wrapper = styled.div`
   padding-top: 20px;
@@ -21,9 +22,10 @@ const StyledTextArea = styled(Input.TextArea)`
   margin: 20px 0px;
 `;
 
-export const CreateChat = () => {
+export const CreateChat: FC<any> = ({ forceClose }) => {
   const { getSocket } = useSockets();
   const { createChat } = useChats();
+  const { openChat } = useCurrentState();
   const address = useInput();
   const message = useInput();
   const [error, setError] = useState("");
@@ -35,7 +37,9 @@ export const CreateChat = () => {
         return;
     }
 
-    await createChat(address.value, message.value);
+    const newChat = await createChat(address.value, socket, message.value);
+    openChat(newChat);
+    forceClose();
   };
 
   return (

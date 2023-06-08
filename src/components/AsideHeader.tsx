@@ -10,6 +10,7 @@ import { ExternalLink } from "./ExternalLink";
 import { Copy } from "./Copy";
 import { useCurrentState } from "src/hooks/useCurrentState";
 import { useChats } from "src/hooks/useChats";
+import { useStandaloneCryption } from "src/hooks/useStandaloneCryption";
 
 const HeaderText = styled.div`
   padding: 20px 0px 20px 25px;
@@ -87,9 +88,9 @@ export const AsideHeader = () => {
   const wallet = useVenomWallet();
   const address = wallet.address?.toString();
   const { logOut } = useAuth();
-  const {} = useChats();
   const { resetState } = useCurrentState();
   const { resetState: resetChats } = useChats();
+  const { resetState: resetStandalone } = useStandaloneCryption();
   const { deleteUserSocket } = useSockets();
   const [isOpenSettings, setIsOpenSettings] = useState(false);
   const [isOpenCreateChat, setIsOpenCreateChat] = useState(false);
@@ -99,6 +100,7 @@ export const AsideHeader = () => {
     deleteUserSocket();
     resetState();
     resetChats();
+    resetStandalone();
   };
 
   const toggleSettings = () => {
@@ -134,7 +136,7 @@ export const AsideHeader = () => {
         footer={null}
         width={300}
       >
-        <CreateChat />
+        <CreateChat forceClose={toggleCreateChat} />
       </Modal>
       <Modal
         centered={true}
