@@ -1,5 +1,5 @@
 import { Address, Contract, ProviderRpcClient } from "everscale-inpage-provider";
-import { abi as SocketAbi } from "contracts/abi/Socket.abi";
+import { abi as UserAbi } from "contracts/abi/User.abi";
 import {
   FC,
   PropsWithChildren,

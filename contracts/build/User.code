@@ -18,16 +18,16 @@ PUSHCONT {
 IF
 LDMSGADDR
 ENDS
-.loc ../contracts/User.sol, 17
+.loc ../contracts/User.sol, 18
 PUSHINT 200000000
 PUSHINT 0
 RAWRESERVE
-.loc ../contracts/User.sol, 18
+.loc ../contracts/User.sol, 19
 GETGLOB 9
 GETGLOB 10
 SDEQ
 PUSHCONT {
-	.loc ../contracts/User.sol, 19
+	.loc ../contracts/User.sol, 20
 	GETGLOB 9
 	NEWC
 	STSLICECONST x42_
@@ -40,26 +40,7 @@ PUSHCONT {
 	.loc ../contracts/User.sol, 0
 }
 IFNOT
-.loc ../contracts/User.sol, 22
-LTIME
-ADDRAND
 .loc ../contracts/User.sol, 23
-PUSHINT 250
-RAND
-SETGLOB 12
-.loc ../contracts/User.sol, 24
-PUSHINT 5
-GETGLOB 12
-DUP2
-OR
-THROWIFNOT 69
-CALLREF {
-	CALL $__exp_macro$
-}
-PUSHINT 23
-MOD
-SETGLOB 13
-.loc ../contracts/User.sol, 26
 NEWC
 STSLICECONST x42_
 STSLICE
@@ -74,7 +55,7 @@ CALLREF {
 }
 THROW 0
 
-.macro getSharedSecret
+.macro getEncryptedPrivateKeyData
 DROP
 GETGLOB 6
 THROWIFNOT 76
@@ -83,19 +64,11 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/User.sol, 29
-OVER
-PUSHCONT {
-	LDREF
-	ENDS
-	CTOS
-}
-IF
-LDU 256
+.loc ../contracts/User.sol, 26
 ENDS
 .loc ../contracts/User.sol, 0
 CALLREF {
-	CALL $getSharedSecret_d6d087a5_internal_macro$
+	CALL $getEncryptedPrivateKeyData_1429d957_internal_macro$
 }
 OVER
 PUSHCONT {
@@ -108,9 +81,13 @@ PUSHCONT {
 	NEWC
 	STSLICECONST xc
 	STSLICE
-	PUSHINT 2371372701
+	PUSHINT 3992714738
 	STUR 130
-	STU 256
+	SWAP
+	UNPAIR
+	XCHG S2
+	STREF
+	STREF
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
@@ -124,26 +101,11 @@ IFREF {
 }
 THROW 0
 
-.macro getSharedSecret_d6d087a5_internal_macro
-.loc ../contracts/User.sol, 31
-GETGLOB 9
-GETGLOB 11
-SDEQ
-THROWIFNOT 201
-.loc ../contracts/User.sol, 32
-PUSHINT 100000000
-PUSHINT 0
-RAWRESERVE
-.loc ../contracts/User.sol, 33
+.macro getEncryptedPrivateKeyData_1429d957_internal_macro
+.loc ../contracts/User.sol, 28
 GETGLOB 12
-DUP2
-OR
-THROWIFNOT 69
-CALLREF {
-	CALL $__exp_macro$
-}
-PUSHINT 23
-MOD
+GETGLOB 13
+PAIR
 .loc ../contracts/User.sol, 0
 
 .macro getPublicKey
@@ -155,7 +117,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/User.sol, 35
+.loc ../contracts/User.sol, 31
 ENDS
 .loc ../contracts/User.sol, 0
 CALLREF {
@@ -172,9 +134,9 @@ PUSHCONT {
 	NEWC
 	STSLICECONST xc
 	STSLICE
-	PUSHINT 3580976269
+	PUSHINT 2558133441
 	STUR 130
-	STU 256
+	STREF
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
@@ -189,8 +151,8 @@ IFREF {
 THROW 0
 
 .macro getPublicKey_2e334452_internal_macro
-.loc ../contracts/User.sol, 37
-GETGLOB 13
+.loc ../contracts/User.sol, 33
+GETGLOB 14
 .loc ../contracts/User.sol, 0
 
 .macro c4_to_c7
@@ -205,12 +167,11 @@ LDREF
 ENDS
 CTOS
 LDMSGADDR
-LDU 256
+LDREF
+LDREF
 LDREF
 ENDS
-CTOS
-LDU 256
-ENDS
+SETGLOB 14
 SETGLOB 13
 SETGLOB 12
 SETGLOB 11
@@ -248,8 +209,34 @@ PUSHCONT {
 		}
 	}
 	IFNOT
-	PUSHINT 0
-	DUP
+	PUSHINT 3
+	PUSH S3
+	PUSHINT 64
+	DICTUGETREF
+	PUSHCONT {
+		PUSHREF {
+		}
+	}
+	IFNOT
+	PUSHINT 4
+	PUSH S4
+	PUSHINT 64
+	DICTUGETREF
+	PUSHCONT {
+		PUSHREF {
+		}
+	}
+	IFNOT
+	PUSHINT 5
+	PUSH S5
+	PUSHINT 64
+	DICTUGETREF
+	PUSHCONT {
+		PUSHREF {
+		}
+	}
+	IFNOT
+	SETGLOB 14
 	SETGLOB 13
 	SETGLOB 12
 	SETGLOB 11
@@ -267,6 +254,7 @@ IFREFELSE {
 }
 
 .macro c7_to_c4
+GETGLOB 14
 GETGLOB 13
 GETGLOB 12
 GETGLOB 11
@@ -278,14 +266,12 @@ STU 256
 STU 64
 STONE
 STSLICE
-ROLLREV 3
+ROLLREV 4
 NEWC
 STSLICE
-STU 256
-SWAP
-NEWC
-STU 256
-STBREFR
+STREF
+STREF
+STREF
 STBREFR
 ENDC
 POPROOT
@@ -399,19 +385,19 @@ CALLREF {
 }
 THROW 60
 
-.macro pubKey
+.macro _publicKey
 DROP
 ENDS
 CALLREF {
 	CALL $c4_to_c7$
 }
-GETGLOB 13
+GETGLOB 14
 OVER
 PUSHCONT {
-	PUSHSLICE xc0000000000000000000000000ef4e5529
+	PUSHSLICE xc0000000000000000000000000dcc1a620
 	NEWC
 	STSLICE
-	STU 256
+	STREF
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
@@ -421,10 +407,10 @@ THROW 0
 
 .macro public_function_selector
 DUP
-PUSHINT 223889053
+PUSHINT 410649793
 EQUAL
 IFJMPREF {
-	CALL $getSharedSecret$
+	CALL $getPublicKey$
 }
 DUP
 PUSHINT 1196840156
@@ -433,15 +419,15 @@ IFJMPREF {
 	CALL $constructor$
 }
 DUP
-PUSHINT 1433492621
+PUSHINT 1556194848
 EQUAL
 IFJMPREF {
-	CALL $getPublicKey$
+	CALL $_publicKey$
 }
 DUP
-PUSHINT 1867404585
+PUSHINT 1845231090
 EQUAL
 IFJMPREF {
-	CALL $pubKey$
+	CALL $getEncryptedPrivateKeyData$
 }
 

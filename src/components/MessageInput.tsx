@@ -6,6 +6,7 @@ import { Button } from "./Button";
 import { useVenomWallet } from "src/hooks/useVenomWallet";
 import { Address } from "everscale-inpage-provider";
 import { useCurrentState } from "src/hooks/useCurrentState";
+import { useChats } from "src/hooks/useChats";
 
 const Wrapper = styled.div`
   padding: 46px 32px 24px 32px;
@@ -27,13 +28,13 @@ const SendButtonWrapper = styled.div`
 `;
 
 export const MessageInput = () => {
-  const { sendMessage } = useMessages();
+  const { sendMessage } = useChats();
   const input = useInput("");
-  const { recipient } = useCurrentState();
+  const { chat } = useCurrentState();
 
   const onClick = () => {
     if (!input.value.trim()) return;
-    sendMessage(input.value, recipient.address?.toString());
+    sendMessage(input.value, chat);
     input.clear();
   };
 

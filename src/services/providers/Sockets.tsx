@@ -12,11 +12,11 @@ import {
 } from "react";
 import { useMap } from "src/hooks/useMap";
 import { useVenomProvider } from "src/hooks/useVenomProvider";
-import { abi as AccountAbi } from "contracts/abi/Account.abi";
+import { abi as FactoryAbi } from "contracts/abi/Factory.abi";
 import { isEmptyAddress } from "src/utils/functions";
 import { useLocalStorage } from "src/hooks/useLocalStorage";
 import { useVenomWallet } from "src/hooks/useVenomWallet";
-import { abi as SocketAbi } from "contracts/abi/Socket.abi";
+import { abi as UserAbi } from "contracts/abi/User.abi";
 import { accountAddress } from "src/utils/constants";
 
 interface SocketsContextProps {
@@ -24,7 +24,7 @@ interface SocketsContextProps {
   createSocket: Function;
   updateUserSocket: Function;
   deleteUserSocket: Function;
-  userSocket?: Contract<typeof SocketAbi>;
+  userSocket?: Contract<typeof UserAbi>;
 }
 
 const defaultContext: SocketsContextProps = {
@@ -42,7 +42,7 @@ export const SocketsProvider: FC<PropsWithChildren> = ({ children }) => {
   const wallet = useVenomWallet();
   const [sockets, addSocket] = useMap(new Map<string, string>());
   const [isUserSocketInitiated, setIsUserSocketInitiated] = useState(false);
-  const [userSocket, setUserSocket] = useState<Contract<typeof SocketAbi>>();
+  const [userSocket, setUserSocket] = useState<Contract<typeof UserAbi>>();
 
   const deleteUserSocket = () => {
     setUserSocket(undefined);
@@ -54,14 +54,16 @@ export const SocketsProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const socket = await getSocket(wallet?.address);
 
-    const contract = new provider.Contract(SocketAbi, new Address(socket));
+    if (!socket) return;
+    setIsUserSocketInitiated(true);
+
+    const contract = new provider.Contract(UserAbi, new Address(socket));
 
     setUserSocket(contract);
   };
 
   useEffect(() => {
     if (!isUserSocketInitiated && wallet?.address && provider) {
-      setIsUserSocketInitiated(true);
       updateUserSocket();
     }
   }, [wallet, provider]);
@@ -69,9 +71,11 @@ export const SocketsProvider: FC<PropsWithChildren> = ({ children }) => {
   const createSocket = async () => {
     if (!provider || !wallet?.address) return;
 
-    const contract = new provider.Contract(AccountAbi, accountAddress);
+    const 
+
+    const contract = new provider.Contract(FactoryAbi, accountAddress);
     await contract.methods
-      .deploySocket({
+      .deployUser({
         sendRemainingGasTo: wallet?.address,
       })
       .sendWithResult({
@@ -87,7 +91,7 @@ export const SocketsProvider: FC<PropsWithChildren> = ({ children }) => {
 
     if (!provider || isEmptyAddress(address)) return;
 
-    const contract = new provider.Contract(AccountAbi, accountAddress);
+    const contract = new provider.Contract(FactoryAbi, accountAddress);
     const result = await contract.methods
       .getSocketAddress({ owner: address })
       .call();

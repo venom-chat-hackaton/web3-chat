@@ -5,6 +5,7 @@ import { Button } from "./Button";
 import { useSockets } from "src/hooks/useSockets";
 import { useState } from "react";
 import { useMessages } from "src/hooks/useMessages";
+import { useChats } from "src/hooks/useChats";
 
 const Wrapper = styled.div`
   padding-top: 20px;
@@ -22,7 +23,7 @@ const StyledTextArea = styled(Input.TextArea)`
 
 export const CreateChat = () => {
   const { getSocket } = useSockets();
-  const { sendMessage } = useMessages();
+  const { createChat } = useChats();
   const address = useInput();
   const message = useInput();
   const [error, setError] = useState("");
@@ -34,7 +35,7 @@ export const CreateChat = () => {
         return;
     }
 
-    await sendMessage(message.value, address.value, true);
+    await createChat(address.value, message.value);
   };
 
   return (

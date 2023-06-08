@@ -26,10 +26,12 @@ const Hash = styled.div`
 `;
 
 export const ChatHeader = () => {
-  const { recipient } = useCurrentState();
-  const address = recipient.address?.toString();
+  const { chat } = useCurrentState();
+   
+  // @ts-ignore
+  const address = chat?.user?.address?.toString();
 
-  if (!recipient.address) return null;
+  if (!address) return null;
 
   return (
     <Wrapper>

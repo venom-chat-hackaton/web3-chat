@@ -11,22 +11,34 @@ const Wrapper = styled.div``;
 export const ChatList = () => {
   const { openChat } = useCurrentState();
   const { chats } = useChats();
-  const wallet = useVenomWallet();
-  const { messages } = useMessages();
-  const lastMessage = messages[messages.length - 1];
+
+  const sortedList = [...chats].sort(
+    ({ lastMessageTimestamp: aTs }, { lastMessageTimestamp: bTs }) => {
+      if (!bTs) return -1;
+      if (!aTs) return 0;
+      if (aTs < bTs) {
+        return -1;
+      }
+      if (aTs > bTs) {
+        return 1;
+      }
+
+      return 0;
+    }
+  );
 
   return (
     <Wrapper>
-      {chats.map((chat) => {
+      {sortedList.map((chat) => {
         const onClick = () => {
-          if (chat.address) {
-            openChat(chat.address);
+          if (chat) {
+            openChat(chat);
           }
         };
         return (
           <ChatItem
             onClick={onClick}
-            key={chat.address?.toString()}
+            key={chat.contract.address?.toString()}
             {...chat}
           />
         );

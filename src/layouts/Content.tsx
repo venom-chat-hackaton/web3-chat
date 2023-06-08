@@ -22,9 +22,10 @@ const Wrapper = styled(motion.div)`
 `;
 
 export const Content = () => {
-  const { recipient } = useCurrentState();
+  const { chat } = useCurrentState();
 
-  if (!recipient.address) {
+  // @ts-ignore
+  if (!chat?.user) {
     return <SelectionWrapper>Select a chat to start messaging</SelectionWrapper>
   }
 

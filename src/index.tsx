@@ -7,7 +7,6 @@ import "src/services/providers/i18n";
 import { ThemeProvider } from "./services/providers/Theme";
 import { AuthProvider } from "./services/providers/Auth";
 import { ChatsProvider } from "./services/providers/Chats";
-import { MessagesProvider } from "./services/providers/Messages";
 import { StateProvider } from "./services/providers/State";
 import { SocketsProvider } from "./services/providers/Sockets";
 
@@ -20,11 +19,9 @@ root.render(
       <AuthProvider>
         <SocketsProvider>
           <ChatsProvider>
-            <MessagesProvider>
-              <StateProvider>
-                <App />
-              </StateProvider>
-            </MessagesProvider>
+            <StateProvider>
+              <App />
+            </StateProvider>
           </ChatsProvider>
         </SocketsProvider>
       </AuthProvider>

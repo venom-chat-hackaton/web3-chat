@@ -9,6 +9,7 @@ import { useVenomWallet } from "src/hooks/useVenomWallet";
 import { ExternalLink } from "./ExternalLink";
 import { Copy } from "./Copy";
 import { useCurrentState } from "src/hooks/useCurrentState";
+import { useChats } from "src/hooks/useChats";
 
 const HeaderText = styled.div`
   padding: 20px 0px 20px 25px;
@@ -86,7 +87,9 @@ export const AsideHeader = () => {
   const wallet = useVenomWallet();
   const address = wallet.address?.toString();
   const { logOut } = useAuth();
+  const {} = useChats();
   const { resetState } = useCurrentState();
+  const { resetState: resetChats } = useChats();
   const { deleteUserSocket } = useSockets();
   const [isOpenSettings, setIsOpenSettings] = useState(false);
   const [isOpenCreateChat, setIsOpenCreateChat] = useState(false);
@@ -95,6 +98,7 @@ export const AsideHeader = () => {
     logOut();
     deleteUserSocket();
     resetState();
+    resetChats();
   };
 
   const toggleSettings = () => {

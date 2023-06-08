@@ -31,7 +31,12 @@ const Info = styled.div`
   align-items: flex-start;
   margin-bottom: 16px;
 `;
-const Message = styled.div``;
+const Message = styled.div`
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
 const Timestamp = styled.div``;
 const Hash = styled.code`
   display: flex;
@@ -61,13 +66,13 @@ const Alias = styled.div``;
 
 export const ChatItem = ({
   onClick,
-  address: a,
+  user,
   alias,
   lastMessageTimestamp,
   lastMessageText,
   selected,
 }: any) => {
-  const address = a.toString();
+  const address = user.address.toString();
 
   return (
     <Wrapper onClick={onClick} selected={selected}>
@@ -80,9 +85,11 @@ export const ChatItem = ({
           </Hash>
           <Alias>{alias}</Alias>
         </Address>
-        <Timestamp>{moment(lastMessageTimestamp).fromNow()}</Timestamp>
+        {lastMessageTimestamp && (
+          <Timestamp>{moment.unix(lastMessageTimestamp).fromNow()}</Timestamp>
+        )}
       </Info>
-      <Message>{lastMessageText}</Message>
+      {lastMessageText && <Message>{lastMessageText}</Message>}
     </Wrapper>
   );
 };

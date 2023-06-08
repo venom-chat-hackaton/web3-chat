@@ -12,7 +12,9 @@ const Wrapper = styled.div`
 `;
 
 export const MessageList = () => {
-  const { messages } = useCurrentState();
+  const { chat } = useCurrentState();
+  // @ts-ignore
+  const messages = chat.messages;
   const bottomRef = useRef(null);
 
   const sortedList = [...messages].sort(

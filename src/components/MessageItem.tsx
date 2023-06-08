@@ -25,6 +25,7 @@ const Message = styled.div<{ outgoing?: boolean }>`
   align-items: ${(props) => (props.outgoing ? "flex-end" : "flex-start")};
 `;
 const Text = styled.div<{ outgoing?: boolean }>`
+  position: relative;
   width: fit-content;
   max-width: 300px;
   background: ${(props) =>
@@ -47,19 +48,23 @@ const TimeAndHash = styled.div<{ outgoing?: boolean }>`
   margin: 0px 6px;
   margin-bottom: 6px;
 `;
-const Hash = styled.div``;
+const StyledSpin = styled(Spin)`
+  position: absolute;
+  bottom: 0;
+  left: -20px;
+`;
 
 export const MessageItem = ({
   sender,
   recipient,
   timestamp,
   text,
-  isPending,
+  pending,
   messageHash,
 }: any) => {
   const wallet = useVenomWallet();
   const me = wallet.address?.toString();
-  const outgoing = sender === me;
+  const outgoing = sender.toString() === me;
 
   return (
     <Wrapper
@@ -71,11 +76,13 @@ export const MessageItem = ({
     >
       <Message outgoing={outgoing}>
         <TimeAndHash outgoing={outgoing}>
-          {isPending && <Spin size="small" />}
           <ExternalLink hash="0:8086ebe35106ad2333874962d960630f3c5807c8b849d43f0ef663a239fddd2f" />
           <code>{moment.unix(timestamp).format("HH:mm")}</code>
         </TimeAndHash>
-        <Text outgoing={outgoing}>{text}</Text>
+        <Text outgoing={outgoing}>
+          {text}
+          {pending && <StyledSpin size="small" />}
+        </Text>
       </Message>
     </Wrapper>
   );

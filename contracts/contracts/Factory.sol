@@ -6,8 +6,8 @@ import "./User.sol";
 import "./Chat.sol";
 
 contract Factory {
-    event NewChat(address peer1, address peer2);
-    uint16  static _nonce;
+    event NewChat(address peer1, address peer2, address newChatAddress);
+    uint16 static _nonce;
     TvmCell static _userCode;
     TvmCell static _chatCode;
     mapping(address => address) userAddress;
@@ -21,13 +21,15 @@ contract Factory {
         sendRemainingGasTo.transfer({ value: 0, flag: 128, bounce: false });
     }
 
-    function deployUser(address sendRemainingGasTo) external {
+    function deployUser(address sendRemainingGasTo, string encryptedPrivateKey, string publicKey) external {
         tvm.rawReserve(0.1 ever, 0);
         TvmCell userStateInit = tvm.buildStateInit({
             contr: User,
             varInit: {
                 _rootAccount: address(this),
-                _owner: msg.sender
+                _owner: msg.sender,
+                _encryptedPrivateKey: encryptedPrivateKey,
+                _publicKey: publicKey
             },
             code: _userCode
         });
@@ -42,8 +44,7 @@ contract Factory {
         ); 
     }
 
-    function deployChat(address peer1, address peer2, address sendRemainingGasTo, string initialMessage, string messageUuid) external {
-
+    function deployChat(address peer1, address peer2, address sendRemainingGasTo, string initialEncryptedMessage, string initialMessageNonce) external {
         require(chatAddress[peer1][peer2] == address(0), 203);
         require(chatAddress[peer2][peer1] == address(0), 203);
 
@@ -69,8 +70,8 @@ contract Factory {
         }(
             sendRemainingGasTo
         ); 
-        emit NewChat(peer1, peer2);
-        Chat(newChatAddress).sendMessage(peer1, peer2, initialMessage, messageUuid);
+        emit NewChat(peer1, peer2, newChatAddress);
+        Chat(newChatAddress).sendMessage(peer1, peer2, initialEncryptedMessage, initialMessageNonce);
     }
 
     function getSocketAddress(address owner) external view returns (address) {
@@ -79,5 +80,9 @@ contract Factory {
 
     function getChatAddress(address peer1, address peer2) external view returns (address) {
         return chatAddress[peer1][peer2];
+    }
+
+    function getChats(address peer) external view returns (mapping(address => address)) {
+        return chatAddress[peer];
     }
 }

@@ -1,0 +1,123 @@
+export const abi = {
+  "ABI version": 2,
+  version: "2.2",
+  header: [
+    "pubkey",
+    "time",
+    "expire"
+  ],
+  functions: [
+    {
+      name: "constructor",
+      inputs: [
+        {
+          name: "sendRemainingGasTo",
+          type: "address"
+        }
+      ],
+      outputs: []
+    },
+    {
+      name: "getEncryptedPrivateKeyData",
+      inputs: [],
+      outputs: [
+        {
+          components: [
+            {
+              name: "encryptedPrivateKey",
+              type: "string"
+            },
+            {
+              name: "privateKeyNonce",
+              type: "string"
+            }
+          ],
+          name: "value0",
+          type: "tuple"
+        }
+      ]
+    },
+    {
+      name: "getPublicKey",
+      inputs: [],
+      outputs: [
+        {
+          name: "value0",
+          type: "string"
+        }
+      ]
+    },
+    {
+      name: "_publicKey",
+      inputs: [],
+      outputs: [
+        {
+          name: "_publicKey",
+          type: "string"
+        }
+      ]
+    }
+  ],
+  data: [
+    {
+      key: 1,
+      name: "_rootAccount",
+      type: "address"
+    },
+    {
+      key: 2,
+      name: "_owner",
+      type: "address"
+    },
+    {
+      key: 3,
+      name: "_encryptedPrivateKey",
+      type: "string"
+    },
+    {
+      key: 4,
+      name: "_privateKeyNonce",
+      type: "string"
+    },
+    {
+      key: 5,
+      name: "_publicKey",
+      type: "string"
+    }
+  ],
+  events: [],
+  fields: [
+    {
+      name: "_pubkey",
+      type: "uint256"
+    },
+    {
+      name: "_timestamp",
+      type: "uint64"
+    },
+    {
+      name: "_constructorFlag",
+      type: "bool"
+    },
+    {
+      name: "_rootAccount",
+      type: "address"
+    },
+    {
+      name: "_owner",
+      type: "address"
+    },
+    {
+      name: "_encryptedPrivateKey",
+      type: "string"
+    },
+    {
+      name: "_privateKeyNonce",
+      type: "string"
+    },
+    {
+      name: "_publicKey",
+      type: "string"
+    }
+  ]
+} as const;
