@@ -1,1 +1,1 @@
-[![Watch the Video Presentation]](https://www.youtube.com/watch?v=TyTN2-qIyZs)
+https://www.youtube.com/watch?v=gh99-yFUxeo&feature=youtu.be
