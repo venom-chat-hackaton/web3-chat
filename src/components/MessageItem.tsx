@@ -25,6 +25,7 @@ const Message = styled.div<{ outgoing?: boolean }>`
   align-items: ${(props) => (props.outgoing ? "flex-end" : "flex-start")};
 `;
 const Text = styled.div<{ outgoing?: boolean }>`
+  text-align: left;
   position: relative;
   width: fit-content;
   max-width: 300px;
