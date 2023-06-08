@@ -1,4 +1,4 @@
-import { Address, Contract, Subscriber } from "everscale-inpage-provider";
+import { Address, Contract, DecodedEventWithTransaction, Subscriber } from "everscale-inpage-provider";
 import {
   FC,
   PropsWithChildren,
@@ -13,8 +13,6 @@ import { abi as UserAbi } from "contracts/abi/User.abi";
 import { abi as FactoryAbi } from "contracts/abi/Factory.abi";
 import { abi as ChatAbi } from "contracts/abi/Chat.abi";
 import { accountAddress } from "src/utils/constants";
-import { v4 as uuid } from "uuid";
-import { DecodedEventWithTransaction } from "locklift";
 import { useForceRender } from "src/hooks/useForceRender";
 import moment from "moment";
 import { useStandaloneCryption } from "src/hooks/useStandaloneCryption";
