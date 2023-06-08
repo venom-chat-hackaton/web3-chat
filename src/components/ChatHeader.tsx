@@ -40,7 +40,7 @@ export const ChatHeader = () => {
         <code>
           {address?.slice(0, 5)}...{address?.slice(-5)}
         </code>
-        <ExternalLink hash="address" />
+        <ExternalLink type="accounts" hash={address} />
         <Copy text={address?.toString()} />
       </Hash>
     </Wrapper>

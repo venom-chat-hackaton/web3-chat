@@ -1,4 +1,9 @@
-import { Address, Contract, DecodedEventWithTransaction, Subscriber } from "everscale-inpage-provider";
+import {
+  Address,
+  Contract,
+  DecodedEventWithTransaction,
+  Subscriber,
+} from "everscale-inpage-provider";
 import {
   FC,
   PropsWithChildren,
@@ -30,10 +35,12 @@ interface Message {
   timestamp: number;
   text: string;
   hash: string;
+  encrypted: string;
   pending?: boolean;
 }
 
 export interface Chat {
+  wallet: Address;
   user: Contract<typeof UserAbi>;
   contract?: Contract<typeof ChatAbi>;
   subscriber?: Subscriber;
@@ -92,14 +99,16 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
     const chats = await contract.methods
       .getChats({ peer: wallet.address })
       .call();
+    const onDelayedNewChat = (event: any) => {
+      setTimeout(() => onNewChat(event), 5000);
+    };
 
     if (!chatsSubscriber) {
       const subscriber = new Subscriber(provider);
       contract
         .events(subscriber)
         .filter(({ event }) => event === "NewChat")
-        // @ts-ignore
-        .on(onNewChat);
+        .on(onDelayedNewChat);
       setChatsSubscriber(subscriber);
     }
 
@@ -114,7 +123,6 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
       contract
         .events(subscriber)
         .filter(({ event }) => event === "NewMessage")
-        // @ts-ignore
         .on(onNewMessage);
       const events = response?.events;
       const messages = events.map(({ data, transaction }) => {
@@ -125,12 +133,21 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
           recipient: data.recipient,
           timestamp: transaction.createdAt,
           text: message,
-          hash: data.encryptedMessage,
+          encrypted: data.encryptedMessage,
+          hash: transaction.id.hash,
         };
       });
       const { text, timestamp } = messages?.[0] || {};
 
-      addChat(user, contract, subscriber, text, timestamp, messages);
+      addChat(
+        new Address(socket),
+        user,
+        contract,
+        subscriber,
+        text,
+        timestamp,
+        messages
+      );
     });
   };
 
@@ -159,6 +176,7 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
       });
 
     const newChat = {
+      wallet: new Address(socket),
       user,
       lastMessageText: message,
       lastMessageTimestamp: moment().unix(),
@@ -169,7 +187,8 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
           sender: wallet?.address ? wallet.address : new Address(""),
           recipient: new Address(socket),
           timestamp: moment().unix(),
-          hash: encryptedMessage,
+          encrypted: encryptedMessage,
+          hash: '',
         },
       ],
     };
@@ -205,7 +224,8 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
       sender: wallet.address,
       recipient: new Address(chat.user.address.toString()),
       timestamp: moment().unix(),
-      hash: encryptedMessage,
+      encrypted: encryptedMessage,
+      hash: '',
     });
   };
 
@@ -244,21 +264,21 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
     const chat: Chat = getChatByAddress(event.transaction.inMessage.dst);
     // @ts-ignore
     const existingMessage = chat.messages.find(
-      ({ hash }: any) => hash === event.data.encryptedMessage
+      ({ encrypted }: any) => encrypted === event.data.encryptedMessage
     );
     const publicKey = await chat.user.fields._publicKey();
     const text = decrypt(event.data.encryptedMessage, publicKey);
     if (existingMessage) {
       existingMessage.pending = false;
+      existingMessage.hash = event.transaction.id.hash;
     } else {
       chat.messages.push({
         text,
-        // @ts-ignore
-        sender: event?.data?.fromAddress,
-        // @ts-ignore
-        recipient: event?.data?.toAddress,
+        sender: event?.data?.sender,
+        recipient: event?.data?.recipient,
         timestamp: event.transaction.createdAt,
-        hash: event.data.encryptedMessage,
+        encrypted: event.data.encryptedMessage,
+        hash: event.transaction.id.hash,
       });
     }
     chat.lastMessageText = text;
@@ -288,11 +308,11 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
       contract
         .events(subscriber)
         .filter(({ event }) => event === "NewMessage")
-        // @ts-ignore
         .on(onNewMessage);
       const response = await contract.getPastEvents({});
-      const user = new provider.Contract(UserAbi, new Address(socket));
-      const publicKeyResponse = await chat?.user?.methods.getPublicKey({}).call();
+      const publicKeyResponse = await chat?.user?.methods
+        .getPublicKey({})
+        .call();
       const publicKey = publicKeyResponse.value0;
       const events = response?.events;
       const messages = events.map(({ data, transaction }) => {
@@ -303,7 +323,8 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
           recipient: data.recipient,
           timestamp: transaction.createdAt,
           text: message,
-          hash: data.encryptedMessage,
+          encrypted: data.encryptedMessage,
+          hash: transaction.id.hash,
         };
       });
 
@@ -321,16 +342,32 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
       contract
         .events(subscriber)
         .filter(({ event }) => event === "NewMessage")
-        // @ts-ignore
         .on(onNewMessage);
+      const response = await contract.getPastEvents({});
+      const publicKeyResponse = await user?.methods.getPublicKey({}).call();
+      const publicKey = publicKeyResponse.value0;
+      const events = response?.events;
+      const messages = events.map(({ data, transaction }) => {
+        const message = decrypt(data.encryptedMessage, publicKey);
+
+        return {
+          sender: data.sender,
+          recipient: data.recipient,
+          timestamp: transaction.createdAt,
+          text: message,
+          encrypted: data.encryptedMessage,
+          hash: transaction.id.hash,
+        };
+      });
 
       const newChat = {
+        wallet: new Address(socket),
         user,
         contract,
         subscriber,
-        lastMessageText: "",
-        lastMessageTimestamp: moment().unix(),
-        messages: [],
+        lastMessageText: messages?.[0]?.text,
+        lastMessageTimestamp: messages?.[0]?.timestamp,
+        messages,
       };
 
       setChats((list) => [...list, newChat]);
@@ -340,6 +377,7 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   const addChat = (
+    wallet: Address,
     user: Contract<typeof UserAbi>,
     contract: Contract<typeof ChatAbi>,
     subscriber: Subscriber,
@@ -350,6 +388,7 @@ export const ChatsProvider: FC<PropsWithChildren> = ({ children }) => {
     setChats((current) => [
       ...current,
       {
+        wallet,
         user,
         contract,
         subscriber,

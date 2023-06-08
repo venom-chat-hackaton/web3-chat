@@ -66,13 +66,13 @@ const Alias = styled.div``;
 
 export const ChatItem = ({
   onClick,
-  user,
+  wallet,
   alias,
   lastMessageTimestamp,
   lastMessageText,
   selected,
 }: any) => {
-  const address = user.address.toString();
+  const address = wallet.toString();
 
   return (
     <Wrapper onClick={onClick} selected={selected}>
@@ -80,7 +80,7 @@ export const ChatItem = ({
         <Address>
           <Hash>
             {address?.slice(0, 5)}...{address?.slice(-5)}
-            <ExternalLink hash="address" />
+            <ExternalLink type="accounts" hash={address} />
             <Copy text={address?.toString()} />
           </Hash>
           <Alias>{alias}</Alias>

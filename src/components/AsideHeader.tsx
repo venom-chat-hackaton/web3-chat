@@ -118,7 +118,7 @@ export const AsideHeader = () => {
         <Address>
           <OnlineIcon />
           {address?.slice(0, 5)}...{address?.slice(-5)}
-          <ExternalLink hash="address" />
+          <ExternalLink type="accounts" hash={String(address)} />
           <Copy text={address?.toString()} />
         </Address>
       </HeaderText>

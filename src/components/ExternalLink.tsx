@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 interface ExternalLinkProps {
   hash: string;
+  type: string;
 }
 
 const ExternalIcon = styled.img`
@@ -19,8 +20,9 @@ const ExternalIcon = styled.img`
 
 const StyledLink = styled.a``;
 
-export const ExternalLink: FC<ExternalLinkProps> = ({ hash }) => {
-  const href = `https://devnet.venomscan.com/accounts/${hash}`;
+export const ExternalLink: FC<ExternalLinkProps> = ({ hash, type }) => {
+  if (!hash) return null;
+  const href = `https://devnet.venomscan.com/${type}/${hash}`;
   return (
     <StyledLink className="external-link" target="_blank" href={href}>
       <ExternalIcon src="/img/external-link.svg" />

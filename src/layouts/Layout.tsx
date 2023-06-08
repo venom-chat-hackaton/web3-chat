@@ -22,8 +22,6 @@ const Wrapper = styled.div`
 export const Layout = () => {
   const { wallet } = useAuth();
   const userSocket = useUserSocket();
-  
-  console.log(wallet);
 
   if (!wallet) {
     return (
