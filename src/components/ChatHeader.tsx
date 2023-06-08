@@ -29,7 +29,7 @@ export const ChatHeader = () => {
   const { chat } = useCurrentState();
    
   // @ts-ignore
-  const address = chat?.user?.address?.toString();
+  const address = chat?.wallet?.toString();
 
   if (!address) return null;
 
