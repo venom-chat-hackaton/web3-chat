@@ -1,3 +1,9 @@
+import { useEffect } from "react";
+import { useAuth } from "./hooks/useAuth";
+import { useChats } from "./hooks/useChats";
+import { useCurrentState } from "./hooks/useCurrentState";
+import { useSockets } from "./hooks/useSockets";
+import { useStandaloneCryption } from "./hooks/useStandaloneCryption";
 import { Layout } from "./layouts/Layout";
 import styled from "styled-components";
 
@@ -10,6 +16,24 @@ const Wrapper = styled.div`
 `;
 
 const App = () => {
+  const { logOut } = useAuth();
+  const { resetState } = useCurrentState();
+  const { resetState: resetChats } = useChats();
+  const { resetState: resetStandalone } = useStandaloneCryption();
+  const { deleteUserSocket } = useSockets();
+
+  const onLogOut = () => {
+    logOut();
+    deleteUserSocket();
+    resetState();
+    resetChats();
+    resetStandalone();
+  };
+
+  useEffect(() => {
+    onLogOut();
+  }, []);
+
   return (
     <Wrapper>
       <Layout />

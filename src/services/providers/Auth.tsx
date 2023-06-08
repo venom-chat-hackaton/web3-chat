@@ -98,7 +98,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     if (!connection) return;
 
     await connection.connect();
-    await updateSocket();
+    if (updateSocket) {
+      await updateSocket();
+    }
   };
 
   const logOut = () => {
