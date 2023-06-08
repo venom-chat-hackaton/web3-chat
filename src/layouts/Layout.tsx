@@ -20,7 +20,7 @@ const Wrapper = styled.div`
 `;
 
 export const Layout = () => {
-  const { wallet } = useAuth();
+  const { wallet, logOut } = useAuth();
   const userSocket = useUserSocket();
 
   if (!wallet) {

@@ -28,6 +28,9 @@ export const useCryption = () => {
         isObject(data) ? JSON.stringify(data) : String(data)
       );
 
+      console.log(wallet);
+      console.log(provider);
+
       const encryptedData = await provider?.encryptData({
         data: base64Data,
         algorithm: "ChaCha20Poly1305",

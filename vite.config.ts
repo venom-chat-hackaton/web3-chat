@@ -6,9 +6,22 @@ import path from "path";
 import wasm from "vite-plugin-wasm";
 import topLevelAwait from "vite-plugin-top-level-await";
 
+const wasmContentTypePlugin = {
+  name: "wasm-content-type-plugin",
+  configureServer(server) {
+    server.middlewares.use((req, res, next) => {
+      if (req.url.endsWith(".wasm")) {
+        res.setHeader("Content-Type", "application/wasm");
+      }
+      next();
+    });
+  },
+};
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    wasmContentTypePlugin,
     wasm(),
     topLevelAwait(),
     react(),

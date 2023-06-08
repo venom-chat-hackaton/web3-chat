@@ -9,6 +9,7 @@ import { AuthProvider } from "./services/providers/Auth";
 import { ChatsProvider } from "./services/providers/Chats";
 import { StateProvider } from "./services/providers/State";
 import { SocketsProvider } from "./services/providers/Sockets";
+import { StandaloneCryptionProvider } from "./services/providers/StandaloneCryption";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -18,11 +19,13 @@ root.render(
     <ThemeProvider>
       <AuthProvider>
         <SocketsProvider>
-          <ChatsProvider>
-            <StateProvider>
-              <App />
-            </StateProvider>
-          </ChatsProvider>
+          <StandaloneCryptionProvider>
+            <ChatsProvider>
+              <StateProvider>
+                <App />
+              </StateProvider>
+            </ChatsProvider>
+          </StandaloneCryptionProvider>
         </SocketsProvider>
       </AuthProvider>
     </ThemeProvider>

@@ -3,6 +3,7 @@ import {
   Contract,
   ProviderRpcClient,
 } from "everscale-inpage-provider";
+import { SimpleKeystore } from "everscale-standalone-client";
 import {
   FC,
   PropsWithChildren,
@@ -14,10 +15,15 @@ import { useMap } from "src/hooks/useMap";
 import { useVenomProvider } from "src/hooks/useVenomProvider";
 import { abi as FactoryAbi } from "contracts/abi/Factory.abi";
 import { isEmptyAddress } from "src/utils/functions";
-import { useLocalStorage } from "src/hooks/useLocalStorage";
 import { useVenomWallet } from "src/hooks/useVenomWallet";
 import { abi as UserAbi } from "contracts/abi/User.abi";
 import { accountAddress } from "src/utils/constants";
+import { useCryption } from "src/hooks/useCryption";
+import * as ed from "@noble/ed25519";
+
+function Utf8ArrayToStr(array: Uint8Array) {
+  return new TextDecoder("utf-8").decode(array);
+}
 
 interface SocketsContextProps {
   getSocket: Function;
@@ -37,12 +43,20 @@ const defaultContext: SocketsContextProps = {
 export const SocketsContext =
   createContext<SocketsContextProps>(defaultContext);
 
+function buf2hex(buffer: any) {
+  // buffer is an ArrayBuffer
+  return [...new Uint8Array(buffer)]
+    .map((x) => x.toString(16).padStart(2, "0"))
+    .join("");
+}
+
 export const SocketsProvider: FC<PropsWithChildren> = ({ children }) => {
   const provider = useVenomProvider();
   const wallet = useVenomWallet();
   const [sockets, addSocket] = useMap(new Map<string, string>());
   const [isUserSocketInitiated, setIsUserSocketInitiated] = useState(false);
   const [userSocket, setUserSocket] = useState<Contract<typeof UserAbi>>();
+  const { encrypt, decrypt } = useCryption();
 
   const deleteUserSocket = () => {
     setUserSocket(undefined);
@@ -69,14 +83,22 @@ export const SocketsProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [wallet, provider]);
 
   const createSocket = async () => {
-    if (!provider || !wallet?.address) return;
+    if (!provider || !wallet?.address || !wallet.publicKey) return;
 
-    const 
+    const uint8PrivateKey = ed.utils.randomPrivateKey();
+    const privateKey = buf2hex(uint8PrivateKey.buffer);
+    const unit8PublicKey = await ed.getPublicKeyAsync(privateKey);
+    const publicKey = buf2hex(unit8PublicKey.buffer);
+
+    const encryptedData = await encrypt(privateKey);
 
     const contract = new provider.Contract(FactoryAbi, accountAddress);
     await contract.methods
       .deployUser({
         sendRemainingGasTo: wallet?.address,
+        encryptedPrivateKey: encryptedData.data,
+        publicKey: publicKey,
+        privateKeyNonce: encryptedData.nonce,
       })
       .sendWithResult({
         amount: "500000000",

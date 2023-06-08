@@ -21,7 +21,7 @@ contract Factory {
         sendRemainingGasTo.transfer({ value: 0, flag: 128, bounce: false });
     }
 
-    function deployUser(address sendRemainingGasTo, string encryptedPrivateKey, string publicKey) external {
+    function deployUser(address sendRemainingGasTo, string encryptedPrivateKey, string publicKey, string privateKeyNonce) external {
         tvm.rawReserve(0.1 ever, 0);
         TvmCell userStateInit = tvm.buildStateInit({
             contr: User,
@@ -29,7 +29,8 @@ contract Factory {
                 _rootAccount: address(this),
                 _owner: msg.sender,
                 _encryptedPrivateKey: encryptedPrivateKey,
-                _publicKey: publicKey
+                _publicKey: publicKey,
+                _privateKeyNonce: privateKeyNonce
             },
             code: _userCode
         });

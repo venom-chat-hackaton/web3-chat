@@ -16,7 +16,8 @@
 			"inputs": [
 				{"name":"sendRemainingGasTo","type":"address"},
 				{"name":"encryptedPrivateKey","type":"string"},
-				{"name":"publicKey","type":"string"}
+				{"name":"publicKey","type":"string"},
+				{"name":"privateKeyNonce","type":"string"}
 			],
 			"outputs": [
 			]

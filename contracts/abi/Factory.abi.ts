@@ -31,6 +31,10 @@ export const abi = {
         {
           name: "publicKey",
           type: "string"
+        },
+        {
+          name: "privateKeyNonce",
+          type: "string"
         }
       ],
       outputs: []
