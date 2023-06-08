@@ -21,9 +21,9 @@ const StartingText = styled.p`
 export const Auth = () => {
   const { checkAuth, hasInitialized } = useAuth();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  // useEffect(() => {
+  //   checkAuth();
+  // }, []);
 
   if (!hasInitialized) {
     return (
