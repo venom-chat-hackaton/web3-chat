@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { MessageItem } from "./MessageItem";
-import { useMessages } from "src/hooks/useMessages";
 import { useEffect, useRef } from "react";
 import { useCurrentState } from "src/hooks/useCurrentState";
 import { useForceRender } from "src/hooks/useForceRender";

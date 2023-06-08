@@ -11,7 +11,6 @@ import { useVenomProvider } from "src/hooks/useVenomProvider";
 import { useVenomWallet } from "src/hooks/useVenomWallet";
 import { useSockets } from "src/hooks/useSockets";
 import { useUserSocket } from "src/hooks/useUserSocket";
-import { useMessages } from "src/hooks/useMessages";
 import { Chat } from "./Chats";
 
 interface StateContextProps {

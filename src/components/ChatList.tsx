@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { ChatItem } from "./ChatItem";
-import { useMessages } from "src/hooks/useMessages";
 import { useVenomWallet } from "src/hooks/useVenomWallet";
 import { useCurrentState } from "src/hooks/useCurrentState";
 import { Address } from "everscale-inpage-provider";

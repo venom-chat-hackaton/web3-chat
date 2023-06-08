@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { Button } from "./Button";
 import { useSockets } from "src/hooks/useSockets";
 import { FC, useState } from "react";
-import { useMessages } from "src/hooks/useMessages";
 import { useChats } from "src/hooks/useChats";
 import { useCurrentState } from "src/hooks/useCurrentState";
 

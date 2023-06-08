@@ -1,6 +1,5 @@
 import { Input } from "antd";
 import { useInput } from "src/hooks/useInput";
-import { useMessages } from "src/hooks/useMessages";
 import styled from "styled-components";
 import { Button } from "./Button";
 import { useVenomWallet } from "src/hooks/useVenomWallet";
