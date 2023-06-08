@@ -66,7 +66,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
       if (!connection) return;
 
-      checkAuth();
+      // checkAuth();
 
       return [connect];
     };
