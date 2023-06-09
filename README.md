@@ -17,7 +17,7 @@
 
 Embrace the revolution with Venom Chat – the passport to global messaging freedom, powered by your Venom Wallet.
 
-:key: # How does it work? 
+:key: ### How does it work? 
 1. During first connection, at initialization stage, app generates key-pair with [tweetnacl.js](https://www.section.io/engineering-education/implementing-public-key-cryptography-in-javascript/) that uses Diffie Hellman Algorithm. Then it encrypts generated private key with Venom Wallet private key using Venom encryptData method. At the last step it creates user’s chat contract, that stores encrypted generated private key, generated public key and nonce.
 
 2. On user login, app gets generated keys data and decrypts it using Venom decryptData method.
