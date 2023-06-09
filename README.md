@@ -1,12 +1,12 @@
 # Venomchat.co is the a Web 3 Messenger with native on-chain message processing, making the most out of TVM architecture of Venom. 
 
-:green_heart: [Watch Venom Chat Pitch Deck Presentation](https://www.youtube.com/watch?v=gh99-yFUxeo&feature=youtu.be)
+:green_circle: [Watch Venom Chat Pitch Deck Presentation](https://www.youtube.com/watch?v=gh99-yFUxeo&feature=youtu.be)
 
-:green_heart: [Pitch Deck Slides from the Video Presentation](https://docs.google.com/presentation/d/1pYn7STvRaf4iE6LoZnB3aAN5BOiUSl1OVlKbij-L-k4/edit?usp=sharing)
+:green_circle: [Pitch Deck Slides from the Video Presentation](https://docs.google.com/presentation/d/1pYn7STvRaf4iE6LoZnB3aAN5BOiUSl1OVlKbij-L-k4/edit?usp=sharing)
 
-:green_heart: [Watch Product Demo](https://youtu.be/6tkwZ8SCLpA)
+:green_circle: [Watch Product Demo](https://youtu.be/6tkwZ8SCLpA)
 
-:green_heart: [DoraHacks BUIDL](https://dorahacks.io/buidl/5564)
+:green_circle: [DoraHacks BUIDL](https://dorahacks.io/buidl/5564)
 
 
 ### :sparkles: Features
