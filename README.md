@@ -4,7 +4,7 @@
 
 [Pitch Deck Slides from the Video Presentation](https://docs.google.com/presentation/d/1pYn7STvRaf4iE6LoZnB3aAN5BOiUSl1OVlKbij-L-k4/edit?usp=sharing)
 
-[![Product Demo Video](![image](https://github.com/venom-chat-hackaton/web3-chat/assets/74674630/5b2028c6-8e15-438a-95df-385c9a9f48c9))](https://youtu.be/6tkwZ8SCLpA "Product Demo Video")
+[![Product Demo Video](https://github.com/venom-chat-hackaton/web3-chat/assets/74674630/5b2028c6-8e15-438a-95df-385c9a9f48c9)](https://youtu.be/6tkwZ8SCLpA "Product Demo Video")
 
 [DoraHacks BUIDL](https://dorahacks.io/buidl/5564)
 
