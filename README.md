@@ -9,7 +9,7 @@
 :green_heart: [DoraHacks BUIDL](https://dorahacks.io/buidl/5564)
 
 
-### Features
+### :sparkles: Features
 
    1. Decentralization & Encryption: total privacy and control in your conversations, free from third-party meddling, no matter where you are.
    2. Monetize Messaging: Set minimal fees for new connection messages and tap into new revenue opportunities.
@@ -25,3 +25,8 @@ Embrace the revolution with Venom Chat – the passport to global messaging free
 3. On send message, it encrypts message using tweetnacl encryption method, sender's generated private key and recipient's generated public key, resulting in encrypted message with nonce that is stored in chat contract's events.
 
 4. On get message, app gets chat contract's events and decrypts message with nonce using tweetnacl decryption method, recipient's generated private key and sender's generated public key.
+
+### :blue_book: Contacts 
+
+[Takhir Adilzhanov](https://www.linkedin.com/in/adilzhanov/) @rihkat
+[Vitaliy Kornatsky](https://www.linkedin.com/in/vitaly-kornatsky-7ab156166/) @kornatsky
