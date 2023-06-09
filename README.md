@@ -29,4 +29,5 @@ Embrace the revolution with Venom Chat – the passport to global messaging free
 ### :blue_book: Contacts 
 
 [Takhir Adilzhanov](https://www.linkedin.com/in/adilzhanov/) @rihkat
+
 [Vitaliy Kornatsky](https://www.linkedin.com/in/vitaly-kornatsky-7ab156166/) @kornatsky
